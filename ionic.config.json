@@ -1,0 +1,7 @@
+{
+  "name": "Notes App 2",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
