@@ -7,6 +7,12 @@ interface BearState {
     //increase: (by: number) => void
     addABear: () => void
 }
+interface FileState {
+    path: string,
+    data: string,
+    directory: string,
+    newFile: () => void
+}
 
 export const useBearStore = create<BearState>()(
     devtools(
