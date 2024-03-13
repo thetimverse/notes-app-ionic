@@ -1,15 +1,10 @@
 import {IonContent, IonHeader, IonPage, IonSearchbar, IonTitle, IonToolbar} from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 import {Button} from "@/components/ui/button";
 import styled from "@emotion/styled";
-import {Route} from "react-router-dom";
-import Note from "@/pages/Note";
+import React from "react";
 
 const StIonContent = styled(IonContent)`
-    display: flex;
-    align-items: center;
-    justify-content: center;
     --padding-start: 2em;
     --padding-top: 2em;
     --background: darkgray;
@@ -36,7 +31,7 @@ const Home: React.FC = () => {
                         <IonTitle size="large">Home</IonTitle>
                     </IonToolbar>
                     <IonToolbar>
-                        <IonSearchbar animated={true} placeholder="Animated" showClearButton="always" autocapitalize={"yes"} color={"light"}></IonSearchbar>
+                        <IonSearchbar animated={true} placeholder="Animated" showClearButton="always" autocapitalize={"yes"}></IonSearchbar>
                     </IonToolbar>
                 </IonHeader>
 
