@@ -1,4 +1,5 @@
 import {
+    IonButton,
     IonContent,
     IonIcon,
     IonItem,
@@ -10,9 +11,29 @@ import {
     IonNote,
 } from '@ionic/react';
 
-import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import {Route, useLocation} from 'react-router-dom';
+import {
+    archiveOutline,
+    archiveSharp,
+    bookmarkOutline,
+    clipboardOutline, clipboardSharp,
+    heartOutline,
+    heartSharp,
+    mailOutline,
+    mailSharp,
+    paperPlaneOutline,
+    paperPlaneSharp,
+    trashOutline,
+    trashSharp,
+    warningOutline,
+    warningSharp
+} from 'ionicons/icons';
 import './Menu.css';
+import {useNoteStore} from "@/stores/FileStore";
+import {Button} from "@/components/ui/button";
+import Page from "@/pages/Page";
+import note from "@/components/Note";
+import styled from "@emotion/styled";
 
 interface AppPage {
     url: string;
@@ -21,20 +42,16 @@ interface AppPage {
     title: string;
 }
 
-function noteId() {
-    return Math.floor(Math.random() * Date.now()).toString(16);
-}
-
 const appPages: AppPage[] = [
     {
         title: 'Note',
         url: '/note',
-        iosIcon: mailOutline,
-        mdIcon: mailSharp
+        iosIcon: clipboardOutline,
+        mdIcon: clipboardSharp
     },
     {
         title: 'New Note',
-        url: `/note/${noteId()}`,
+        url: `/note/:id`,
         iosIcon: paperPlaneOutline,
         mdIcon: paperPlaneSharp
     },
@@ -54,14 +71,22 @@ const appPages: AppPage[] = [
 
 const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
+const StIonButton = styled(IonButton)`
+    margin-left: 1em;
+    margin-bottom: 20px;
+`
+
 const Menu: React.FC = () => {
     const location = useLocation();
+    const addANote = useNoteStore((s) => s.addANote);
+    const noteId = useNoteStore((s) => s.id)
 
     return (
         <IonMenu contentId="main" type="overlay">
             <IonContent>
                 <IonList id="inbox-list">
                     <IonListHeader>Notes App</IonListHeader>
+                    <StIonButton onClick={addANote} routerLink={`/note/${noteId}`}>New Note</StIonButton>
                     {appPages.map((appPage, index) => {
                         return (
                             <IonMenuToggle key={index} autoHide={false}>
