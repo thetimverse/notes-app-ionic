@@ -11,8 +11,25 @@ import {
 } from '@ionic/react';
 
 import { useLocation } from 'react-router-dom';
-import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import {
+    archiveOutline,
+    archiveSharp,
+    bookmarkOutline,
+    clipboardOutline, clipboardSharp,
+    heartOutline,
+    heartSharp,
+    mailOutline,
+    mailSharp,
+    paperPlaneOutline,
+    paperPlaneSharp,
+    trashOutline,
+    trashSharp,
+    warningOutline,
+    warningSharp
+} from 'ionicons/icons';
 import './Menu.css';
+import {useNoteStore} from "@/stores/FileStore";
+import {Button} from "@/components/ui/button";
 
 interface AppPage {
     url: string;
@@ -29,8 +46,8 @@ const appPages: AppPage[] = [
     {
         title: 'Note',
         url: '/note',
-        iosIcon: mailOutline,
-        mdIcon: mailSharp
+        iosIcon: clipboardOutline,
+        mdIcon: clipboardSharp
     },
     {
         title: 'New Note',
@@ -56,12 +73,16 @@ const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
 const Menu: React.FC = () => {
     const location = useLocation();
+    const addANote = useNoteStore((s) => s.addANote);
+    const notes = useNoteStore((s) => s.notes)
 
     return (
         <IonMenu contentId="main" type="overlay">
             <IonContent>
                 <IonList id="inbox-list">
                     <IonListHeader>Notes App</IonListHeader>
+                    <Button onClick={addANote}>New Note</Button>
+                    <p className={"mx-4 mb-2"}>{notes} notes</p>
                     {appPages.map((appPage, index) => {
                         return (
                             <IonMenuToggle key={index} autoHide={false}>
