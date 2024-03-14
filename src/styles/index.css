@@ -72,10 +72,9 @@
   }
   body {
     @apply bg-background text-foreground;
-
-    h1 {
-      font-size: 2em;
-      font-weight: 700;
-    }
+  }
+  h1 {
+    font-size: 2em;
+    font-weight: 700;
   }
 }

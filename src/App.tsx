@@ -3,17 +3,11 @@ import {
   IonApp,
   IonIcon,
   IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
+  IonRouterOutlet, IonSplitPane,
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import {clipboard, clipboardOutline, create, ellipse, home, square, triangle} from 'ionicons/icons';
-import Home from './pages/Home';
-import Note from './pages/Note';
-import Tab3 from './pages/Tab3';
+import {clipboard, clipboardOutline, create, home} from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,51 +27,30 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Page from "@/pages/Page";
+import Menu from "@/components/Menu";
 
 setupIonicReact();
 
-function noteId() {
-  return Math.floor(Math.random() * Date.now()).toString(16);
-}
-
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path="/home">
-            <Home />
-          </Route>
-          <Route exact path="/note">
-            <Note />
-          </Route>
-          <Route path={`/note/:id`}>
-            <Note />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/home" />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href="/home">
-            <IonIcon aria-hidden="true" icon={home} />
-            <IonLabel>Home</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="note" href={`/note/${noteId()}`}>
-            <IonIcon aria-hidden="true" icon={create} />
-            <IonLabel>New Note</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon aria-hidden="true" icon={square} />
-            <IonLabel>Tab 3</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
+    <IonApp>
+      <IonReactRouter>
+        <IonSplitPane contentId="main">
+          <Menu />
+          <IonRouterOutlet id="main">
+            <Route path="/" exact={true}>
+              <Redirect to="/note" />
+            </Route>
+            <Route path="/note" exact={true}>
+              <Page />
+            </Route>
+            <Route path="/note/:id" exact={true}>
+              <Page />
+            </Route>
+          </IonRouterOutlet>
+        </IonSplitPane>
+      </IonReactRouter>
+    </IonApp>
 );
 
 export default App;
