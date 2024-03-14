@@ -2,9 +2,9 @@
 
 ## Technologies
 This is a notes app, made with:
-- React, 
-- TypeScript,
-- [Ionic](https://ionicframework.com/docs/). 
+- React
+- TypeScript
+- [Ionic](https://ionicframework.com/docs/)
 
 Also using:
 - [Zustand](https://zustand-demo.pmnd.rs/) for a store, [Ionic FileSystem API](https://capacitorjs.com/docs/apis/filesystem) to store files, [shadcn/ui](https://ui.shadcn.com/docs) for some UI components and [CKEditor 5](https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start.html) to take the actual notes
