@@ -1,11 +1,10 @@
 import { create } from 'zustand'
 import {createJSONStorage, devtools, persist} from 'zustand/middleware'
 import type {} from '@redux-devtools/extension'
-import {data} from "autoprefixer"; // required for devtools typing
+import {data} from "autoprefixer";
 
 interface NewNoteState {
     notes: number
-    //increase: (by: number) => void
     addANote: () => void
 }
 interface NoteState {
@@ -19,10 +18,6 @@ interface NoteState {
 export const useNoteStore = create<NewNoteState>()(
     devtools(
         persist(
-            //(set) => ({
-            //    bears: 0,
-            //    increase: (by) => set((state) => ({ bears: state.bears + by })),
-            //}),
             (set, get) => ({
                 notes: 0,
                 addANote: () => set({ notes: get().notes + 1 }),
