@@ -1,4 +1,5 @@
 import {
+    IonButton,
     IonContent,
     IonIcon,
     IonItem,
@@ -10,7 +11,7 @@ import {
     IonNote,
 } from '@ionic/react';
 
-import { useLocation } from 'react-router-dom';
+import {Route, useLocation} from 'react-router-dom';
 import {
     archiveOutline,
     archiveSharp,
@@ -30,16 +31,15 @@ import {
 import './Menu.css';
 import {useNoteStore} from "@/stores/FileStore";
 import {Button} from "@/components/ui/button";
+import Page from "@/pages/Page";
+import note from "@/components/Note";
+import styled from "@emotion/styled";
 
 interface AppPage {
     url: string;
     iosIcon: string;
     mdIcon: string;
     title: string;
-}
-
-function noteId() {
-    return Math.floor(Math.random() * Date.now()).toString(16);
 }
 
 const appPages: AppPage[] = [
@@ -51,7 +51,7 @@ const appPages: AppPage[] = [
     },
     {
         title: 'New Note',
-        url: `/note/${noteId()}`,
+        url: `/note/:id`,
         iosIcon: paperPlaneOutline,
         mdIcon: paperPlaneSharp
     },
@@ -71,18 +71,22 @@ const appPages: AppPage[] = [
 
 const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 
+const StIonButton = styled(IonButton)`
+    margin-left: 1em;
+    margin-bottom: 20px;
+`
+
 const Menu: React.FC = () => {
     const location = useLocation();
     const addANote = useNoteStore((s) => s.addANote);
-    const notes = useNoteStore((s) => s.notes)
+    const noteId = useNoteStore((s) => s.id)
 
     return (
         <IonMenu contentId="main" type="overlay">
             <IonContent>
                 <IonList id="inbox-list">
                     <IonListHeader>Notes App</IonListHeader>
-                    <Button onClick={addANote}>New Note</Button>
-                    <p className={"mx-4 mb-2"}>{notes} notes</p>
+                    <StIonButton onClick={addANote} routerLink={`/note/${noteId}`}>New Note</StIonButton>
                     {appPages.map((appPage, index) => {
                         return (
                             <IonMenuToggle key={index} autoHide={false}>

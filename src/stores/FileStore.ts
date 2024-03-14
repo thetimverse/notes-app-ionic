@@ -4,23 +4,25 @@ import type {} from '@redux-devtools/extension'
 import {data} from "autoprefixer";
 
 interface NewNoteState {
-    notes: number
-    addANote: () => void
-}
-interface NoteState {
     id: number,
     title: string,
-    content: Array<string>,
-    date: Date,
-    updateData: () => void
+    content?: Array<string>,
+    date?: Date,
+    addANote: () => void,
+    updateData?: () => void
+}
+
+function noteId() {
+    return Math.floor(Math.random() * Date.now());
 }
 
 export const useNoteStore = create<NewNoteState>()(
     devtools(
         persist(
             (set, get) => ({
-                notes: 0,
-                addANote: () => set({ notes: get().notes + 1 }),
+                id: 0,
+                title: '',
+                addANote: () => set({ id: noteId() }),
             }),
             {
                 name: 'notes-storage',
@@ -29,6 +31,7 @@ export const useNoteStore = create<NewNoteState>()(
         ),
     ),
 )
+/*
 export const useFileStore = create<NoteState>()(
     devtools(
         persist(
@@ -45,4 +48,4 @@ export const useFileStore = create<NoteState>()(
             },
         ),
     ),
-)
+)*/
