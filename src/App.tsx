@@ -29,6 +29,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Page from "@/pages/Page";
 import Menu from "@/components/Menu";
+import './App.css';
 
 setupIonicReact();
 

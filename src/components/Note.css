@@ -9,8 +9,9 @@
     text-align: center;
 }
 
-.ck-content {
+.ck-editor__editable_inline:not(.ck-comment__input *) {
     height: 100vh;
+    overflow-y: auto;
 }
 
 .ck-editor__main {
