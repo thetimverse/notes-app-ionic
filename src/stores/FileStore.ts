@@ -3,24 +3,26 @@ import {createJSONStorage, devtools, persist} from 'zustand/middleware'
 import type {} from '@redux-devtools/extension'
 import {data} from "autoprefixer";
 
-interface NewNoteState {
+interface NoteState {
+    note: Array<string>,
     id: number,
     title: string,
     content?: Array<string>,
     date?: Date,
     addANote: () => void,
-    updateData?: () => void
+    updateData?: () => void,
 }
 
 function noteId() {
     return Math.floor(Math.random() * Date.now());
 }
 
-export const useNoteStore = create<NewNoteState>()(
+export const useNoteStore = create<NoteState>()(
     devtools(
         persist(
             (set, get) => ({
-                id: 0,
+                note: [],
+                id: noteId(),
                 title: '',
                 addANote: () => set({ id: noteId() }),
             }),
