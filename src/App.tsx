@@ -29,7 +29,6 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Page from "@/pages/Page";
 import Menu from "@/components/Menu";
-import Test from "@/pages/Test";
 import './App.css';
 
 setupIonicReact();
@@ -45,9 +44,6 @@ const App: React.FC = () => (
             </Route>
             <Route path="/note" exact={true}>
               <Page />
-            </Route>
-            <Route path="/test" exact={true}>
-              <Test />
             </Route>
             <Route path="/note/:id" exact={true}>
               <Page />
