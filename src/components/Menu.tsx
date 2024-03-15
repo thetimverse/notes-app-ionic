@@ -8,7 +8,7 @@ import {
     IonListHeader,
     IonMenu,
     IonMenuToggle,
-    IonNote,
+    IonNote, useIonRouter,
 } from '@ionic/react';
 
 import {Route, useLocation} from 'react-router-dom';
@@ -34,6 +34,7 @@ import {Button} from "@/components/ui/button";
 import Page from "@/pages/Page";
 import note from "@/components/Note";
 import styled from "@emotion/styled";
+import { v4 as uuid } from 'uuid';
 
 interface AppPage {
     url: string;
@@ -79,14 +80,22 @@ const StIonButton = styled(IonButton)`
 const Menu: React.FC = () => {
     const location = useLocation();
     const addANote = useNoteStore((s) => s.addANote);
-    const noteId = useNoteStore((s) => s.id)
+    const navigate = useIonRouter();
+
+    const addNewNote = () => {
+        const id = uuid();
+        addANote(id);
+        navigate.push(`/notes/${id}`);
+    };
 
     return (
         <IonMenu contentId="main" type="overlay">
             <IonContent>
                 <IonList id="inbox-list">
                     <IonListHeader>Notes App</IonListHeader>
-                    <StIonButton onClick={addANote} routerLink={`/note/${noteId}`}>New Note</StIonButton>
+
+                    <StIonButton onClick={addNewNote}>New Note</StIonButton>
+
                     {appPages.map((appPage, index) => {
                         return (
                             <IonMenuToggle key={index} autoHide={false}>

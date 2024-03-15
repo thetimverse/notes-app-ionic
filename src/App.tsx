@@ -40,12 +40,12 @@ const App: React.FC = () => (
           <Menu />
           <IonRouterOutlet id="main">
             <Route path="/" exact={true}>
-              <Redirect to="/note" />
+              <Redirect to="/notes" />
             </Route>
-            <Route path="/note" exact={true}>
+            <Route path="/notes" exact={true}>
               <Page />
             </Route>
-            <Route path="/note/:id" exact={true}>
+            <Route path="/notes/:id" exact={true}>
               <Page />
             </Route>
           </IonRouterOutlet>
