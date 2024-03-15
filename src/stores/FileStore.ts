@@ -44,7 +44,14 @@ export const useNoteStore = create<NoteState & NoteUpdate>()(
             ),
             //updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
             deleteNote: (id) => set((state) => ({
-                notes: [{id}].splice(0, 1)
+                // FIX: splice works but deletes more than 1 note and not the one selected
+                // notes: [{id}].splice(0, 1)
+
+                // FIX: works but deletes all the notes
+                notes: [].filter((noteId) => noteId !== id),
+
+                // FIX: works but keeps only the note selected
+                notes: [{id}].filter((noteId) => noteId !== id),
             }))
         }),
         {

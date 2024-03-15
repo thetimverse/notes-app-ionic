@@ -10,13 +10,12 @@ import {IonButton, IonInput, IonItem} from "@ionic/react";
 
 interface ContainerProps {
     name: string;
+    note: NoteState["notes"];
 }
 
-const Note: React.FC<ContainerProps> = ({name}) => {
-    const notes = useNoteStore((s) => s.notes);
+const Note: React.FC<ContainerProps> = ({name, note}) => {
     const updateContent = useNoteStore((s) => s.updateNote);
     const {id} = useParams<{ id: string; }>();
-    console.log(id);
 
     const getTitle = (title: string) => {
         return title;
@@ -33,46 +32,41 @@ const Note: React.FC<ContainerProps> = ({name}) => {
     return (
         <div className="container">
             <IonItem>
-                <IonInput label="Title" labelPlacement="floating" onIonChange={(e: any) => getTitle(e.target.value)}></IonInput>
+                <IonInput label="Title" labelPlacement="floating"
+                          onIonChange={(e: any) => getTitle(e.target.value)}></IonInput>
             </IonItem>
-            {
-                notes.map((note, index) => {
-                    return (
-                        <CKEditor
-                            key={index}
-                            editor={ClassicEditor}
-                            config={{
-                                toolbar: {
-                                    items: [
-                                        'undo', 'redo',
-                                        '|', 'heading',
-                                        '|', 'bold', 'italic',
-                                        '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
-                                    ]
-                                },
-                            }}
-                            data={`${note.content}`}
-                            onReady={editor => {
-                                console.log(note.content)
-                            }}
-                            onChange={(event) => {
+            <CKEditor
 
-                            }}
-                            onBlur={(event, editor) => {
-                                console.log('Blur.', editor);
-                                const data = editor.getData();
-                                const updatedAt = new Date().toISOString();
-                                console.log(data);
-                                updateContent(id, data, updatedAt);
-                                console.log(updateContent);
-                            }}
-                            onFocus={(event, editor) => {
-                                console.log('Focus.', editor);
-                            }}
-                        />
-                    )
-                })
-            }
+                editor={ClassicEditor}
+                config={{
+                    toolbar: {
+                        items: [
+                            'undo', 'redo',
+                            '|', 'heading',
+                            '|', 'bold', 'italic',
+                            '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
+                        ]
+                    },
+                }}
+                data={`${note.content}`}
+                onReady={editor => {
+                    console.log(note.content)
+                }}
+                onChange={(event) => {
+
+                }}
+                onBlur={(event, editor) => {
+                    console.log('Blur.', editor);
+                    const data = editor.getData();
+                    const updatedAt = new Date().toISOString();
+                    console.log(data);
+                    updateContent(id, data, updatedAt);
+                    console.log(updateContent);
+                }}
+                onFocus={(event, editor) => {
+                    console.log('Focus.', editor);
+                }}
+            />
             <IonButton onClick={updateNote}>Update content</IonButton>
         </div>
     );

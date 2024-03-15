@@ -100,8 +100,9 @@ const Menu: React.FC = () => {
                     {
                         notes.map((note, index) => {
                             const deleteNote = () => {
-                                console.log("note deleted")
+                                console.log("note deleted");
                                 deleteTheNote(`${note.id}`);
+                                console.log(note.id);
                             };
 
                             return (
