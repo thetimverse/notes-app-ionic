@@ -44,7 +44,7 @@ export const useNoteStore = create<NoteState & NoteUpdate>()(
             ),
             //updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
             deleteNote: (id) => set((state) => ({
-
+                notes: [{id}].splice(0, 1)
             }))
         }),
         {
