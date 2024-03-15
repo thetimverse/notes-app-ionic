@@ -13,42 +13,51 @@ interface ContainerProps {
     name: string;
 }
 
-const ExploreContainer: React.FC<ContainerProps> = ({ name }) => {
+const ExploreContainer: React.FC<ContainerProps> = ({name}) => {
+    const notes = useNoteStore((s) => s.notes);
     const updateContent = useNoteStore((s) => s.addNote);
-    const { id } = useParams<{ id: string; }>();
+    const {id} = useParams<{ id: string; }>();
     console.log(id);
 
     return (
         <div className="container">
-            <CKEditor
-                editor={ClassicEditor}
-                config={{
-                    toolbar: {
-                        items: [
-                            'undo', 'redo',
-                            '|', 'heading',
-                            '|', 'bold', 'italic',
-                            '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
-                        ]
-                    },
-                }}
-                data="<p>Write here</p>"
-                onReady={editor => {
-                }}
-                onChange={(event) => {
-                    console.log(event);
-                }}
-                onBlur={(event, editor) => {
-                    console.log('Blur.', editor);
-                    const data = editor.getData();
-                    const updatedAt = new Date().toISOString();
-                    console.log(data);
-                    updateContent(id, data, updatedAt);
-                }}
-                onFocus={(event, editor) => {
-                    console.log('Focus.', editor);
-                }}
-            />
+            {
+                notes.map((note, index) => {
+                    return (
+                        <CKEditor
+                            key={index}
+                            editor={ClassicEditor}
+                            config={{
+                                toolbar: {
+                                    items: [
+                                        'undo', 'redo',
+                                        '|', 'heading',
+                                        '|', 'bold', 'italic',
+                                        '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
+                                    ]
+                                },
+                            }}
+                            data={`${note.content}`}
+                            onReady={editor => {
+                                console.log(note.content)
+                            }}
+                            onChange={(event) => {
+
+                            }}
+                            onBlur={(event, editor) => {
+                                console.log('Blur.', editor);
+                                const data = editor.getData();
+                                const updatedAt = new Date().toISOString();
+                                console.log(data);
+                                updateContent(id, data, updatedAt);
+                            }}
+                            onFocus={(event, editor) => {
+                                console.log('Focus.', editor);
+                            }}
+                        />
+                    )
+                })
+            }
         </div>
     );
 };
