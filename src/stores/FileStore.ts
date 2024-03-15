@@ -1,51 +1,33 @@
-import { create } from 'zustand'
-import {createJSONStorage, devtools, persist} from 'zustand/middleware'
-import type {} from '@redux-devtools/extension'
-import {data} from "autoprefixer";
+import {create} from 'zustand';
+import {createJSONStorage, devtools, persist} from 'zustand/middleware';
+import type {} from '@redux-devtools/extension';
+import {immer} from 'zustand/middleware/immer';
 
-interface NewNoteState {
-    id: number,
-    title: string,
-    content?: Array<string>,
-    date?: Date,
-    addANote: () => void,
-    updateData?: () => void
+interface NoteState {
+    notes: { id?: string, content?: string, createdAt?: string, updatedAt?: string }[],
+    addNote: (id: string, content?: string, updatedAt?: string) => void,
 }
 
-function noteId() {
-    return Math.floor(Math.random() * Date.now());
-}
-
-export const useNoteStore = create<NewNoteState>()(
-    devtools(
-        persist(
-            (set, get) => ({
-                id: 0,
-                title: '',
-                addANote: () => set({ id: noteId() }),
-            }),
-            {
-                name: 'notes-storage',
-                storage: createJSONStorage(() => localStorage),
-            },
-        ),
-    ),
+export const useNoteStore = create<NoteState>()(
+    persist(
+        (set, get) => ({
+            notes: [],
+            addNote: (id, content, updatedAt) => set((state) => ({
+                    notes: [
+                        ...state.notes,
+                        {
+                            id,
+                            content,
+                            createdAt: new Date().toISOString(),
+                            updatedAt,
+                        }
+                    ],
+                })
+            ),
+        }),
+        {
+            name: 'notes-storage',
+            storage: createJSONStorage(() => localStorage),
+        },
+    )
 )
-/*
-export const useFileStore = create<NoteState>()(
-    devtools(
-        persist(
-            (set, get) => ({
-                id: 0,
-                title: '',
-                content: [],
-                date: new Date(),
-                updateData: (content?: any) => set(() => ({ content: content })),
-            }),
-            {
-                name: 'note-storage',
-                storage: createJSONStorage(() => localStorage),
-            },
-        ),
-    ),
-)*/

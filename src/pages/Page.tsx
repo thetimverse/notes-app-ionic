@@ -5,7 +5,6 @@ import './Page.css';
 import Note from "@/components/Note";
 
 const Page: React.FC = () => {
-
     const { name } = useParams<{ name: string; }>();
 
     return (
