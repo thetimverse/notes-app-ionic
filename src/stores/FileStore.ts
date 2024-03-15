@@ -4,11 +4,17 @@ import type {} from '@redux-devtools/extension';
 import {immer} from 'zustand/middleware/immer';
 
 interface NoteState {
-    notes: { id?: string, content?: string, createdAt?: string, updatedAt?: string }[],
+    notes: { id?: string, title?: string, content?: string, createdAt?: string, updatedAt?: string }[],
     addNote: (id: string, content?: string, updatedAt?: string) => void,
+    updateNote: (id: string, title?: string, content?: string, updatedAt?: string) => void,
+    deleteNote: (id: string) => void,
 }
 
-export const useNoteStore = create<NoteState>()(
+type NoteUpdate = {
+    updateANote?: (notes: { id: string, title: string, content: string, updatedAt: string }[]) => void
+}
+
+export const useNoteStore = create<NoteState & NoteUpdate>()(
     persist(
         (set, get) => ({
             notes: [],
@@ -24,6 +30,22 @@ export const useNoteStore = create<NoteState>()(
                     ],
                 })
             ),
+            updateNote: (id, title, content, updatedAt) => set((state) => ({
+                    notes: [
+                        ...state.notes,
+                        {
+                            id,
+                            title,
+                            content,
+                            updatedAt,
+                        }
+                    ],
+                })
+            ),
+            //updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
+            deleteNote: (id) => set((state) => ({
+
+            }))
         }),
         {
             name: 'notes-storage',

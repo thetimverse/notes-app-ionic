@@ -1,26 +1,40 @@
 import './ExploreContainer.css';
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import './Note.css'
-//import {useFileStore} from "@/stores/FileStore";
-import {Directory, Encoding, Filesystem} from "@capacitor/filesystem";
+import './Note.css';
 import {Button} from "@/components/ui/button";
 import {Autosave} from "@ckeditor/ckeditor5-autosave";
 import {useNoteStore} from "@/stores/FileStore";
 import {useParams} from "react-router";
+import {IonButton, IonInput, IonItem} from "@ionic/react";
 
 interface ContainerProps {
     name: string;
 }
 
-const ExploreContainer: React.FC<ContainerProps> = ({name}) => {
+const Note: React.FC<ContainerProps> = ({name}) => {
     const notes = useNoteStore((s) => s.notes);
-    const updateContent = useNoteStore((s) => s.addNote);
+    const updateContent = useNoteStore((s) => s.updateNote);
     const {id} = useParams<{ id: string; }>();
     console.log(id);
 
+    const getTitle = (title: string) => {
+        return title;
+    }
+    const updateNote = () => {
+        const updatedAt = new Date().toISOString();
+        const title = getTitle("title");
+        const content = "Hello";
+
+        updateContent(id, title, content, updatedAt);
+        console.log(title);
+    }
+
     return (
         <div className="container">
+            <IonItem>
+                <IonInput label="Title" labelPlacement="floating" onIonChange={(e: any) => getTitle(e.target.value)}></IonInput>
+            </IonItem>
             {
                 notes.map((note, index) => {
                     return (
@@ -50,6 +64,7 @@ const ExploreContainer: React.FC<ContainerProps> = ({name}) => {
                                 const updatedAt = new Date().toISOString();
                                 console.log(data);
                                 updateContent(id, data, updatedAt);
+                                console.log(updateContent);
                             }}
                             onFocus={(event, editor) => {
                                 console.log('Focus.', editor);
@@ -58,8 +73,9 @@ const ExploreContainer: React.FC<ContainerProps> = ({name}) => {
                     )
                 })
             }
+            <IonButton onClick={updateNote}>Update content</IonButton>
         </div>
     );
 };
 
-export default ExploreContainer;
+export default Note;
