@@ -10,6 +10,7 @@ import {IonButton, IonInput, IonItem} from "@ionic/react";
 
 interface ContainerProps {
     name: string;
+    // TODO: what is the correct way to write this?
     note: NoteState["notes"];
 }
 
