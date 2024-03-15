@@ -79,6 +79,7 @@ const StIonButton = styled(IonButton)`
 const Menu: React.FC = () => {
     const location = useLocation();
     const addNote = useNoteStore((s) => s.addNote);
+    const deleteTheNote = useNoteStore((s) => s.deleteNote);
     const notes = useNoteStore((s) => s.notes);
     const navigate = useIonRouter();
 
@@ -98,11 +99,19 @@ const Menu: React.FC = () => {
                     <StIonButton onClick={addNewNote}>New Note</StIonButton>
                     {
                         notes.map((note, index) => {
+                            const deleteNote = () => {
+                                console.log("note deleted")
+                                deleteTheNote(`${note.id}`);
+                            };
+
                             return (
                                 <IonMenuToggle key={index} autoHide={false}>
                                     <IonItem className={location.pathname === note.id ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" lines="none" detail={false}>
-                                        <IonIcon aria-hidden="true" slot="start" ios={clipboardOutline} md={clipboardSharp} />
                                         <IonLabel>{note.id}</IonLabel>
+                                        <IonIcon aria-hidden="true" slot="end" ios={clipboardOutline} md={clipboardSharp} />
+                                        <IonButton onClick={deleteNote}>
+                                            <IonIcon aria-hidden="true" slot="end" ios={trashOutline} md={trashSharp}  />
+                                        </IonButton>
                                     </IonItem>
                                 </IonMenuToggle>
                             );
