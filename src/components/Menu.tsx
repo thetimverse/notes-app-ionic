@@ -32,7 +32,6 @@ import './Menu.css';
 import {useNoteStore} from "@/stores/FileStore";
 import {Button} from "@/components/ui/button";
 import Page from "@/pages/Page";
-import note from "@/components/Note";
 import styled from "@emotion/styled";
 import { v4 as uuid } from 'uuid';
 
@@ -46,13 +45,13 @@ interface AppPage {
 const appPages: AppPage[] = [
     {
         title: 'Note',
-        url: '/note',
+        url: '/notes',
         iosIcon: clipboardOutline,
         mdIcon: clipboardSharp
     },
     {
         title: 'New Note',
-        url: `/note/:id`,
+        url: `/notes/:id`,
         iosIcon: paperPlaneOutline,
         mdIcon: paperPlaneSharp
     },
@@ -79,12 +78,14 @@ const StIonButton = styled(IonButton)`
 
 const Menu: React.FC = () => {
     const location = useLocation();
-    const addANote = useNoteStore((s) => s.addANote);
+    const addNote = useNoteStore((s) => s.addNote);
+    const notes = useNoteStore((s) => s.notes);
     const navigate = useIonRouter();
 
     const addNewNote = () => {
         const id = uuid();
-        addANote(id);
+        const updatedAt = new Date().toISOString();
+        addNote(id, updatedAt);
         navigate.push(`/notes/${id}`);
     };
 
@@ -95,17 +96,18 @@ const Menu: React.FC = () => {
                     <IonListHeader>Notes App</IonListHeader>
 
                     <StIonButton onClick={addNewNote}>New Note</StIonButton>
-
-                    {appPages.map((appPage, index) => {
-                        return (
-                            <IonMenuToggle key={index} autoHide={false}>
-                                <IonItem className={location.pathname === appPage.url ? 'selected' : ''} routerLink={appPage.url} routerDirection="none" lines="none" detail={false}>
-                                    <IonIcon aria-hidden="true" slot="start" ios={appPage.iosIcon} md={appPage.mdIcon} />
-                                    <IonLabel>{appPage.title}</IonLabel>
-                                </IonItem>
-                            </IonMenuToggle>
-                        );
-                    })}
+                    {
+                        notes.map((note, index) => {
+                            return (
+                                <IonMenuToggle key={index} autoHide={false}>
+                                    <IonItem className={location.pathname === note.id ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" lines="none" detail={false}>
+                                        <IonIcon aria-hidden="true" slot="start" ios={clipboardOutline} md={clipboardSharp} />
+                                        <IonLabel>{note.id}</IonLabel>
+                                    </IonItem>
+                                </IonMenuToggle>
+                            );
+                        })
+                    }
                 </IonList>
 
                 <IonList id="labels-list">
