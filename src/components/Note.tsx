@@ -2,12 +2,10 @@ import './ExploreContainer.css';
 import {CKEditor} from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import './Note.css';
-import {Button} from "@/components/ui/button";
-import {Autosave} from "@ckeditor/ckeditor5-autosave";
 import {useNoteStore} from "@/stores/FileStore";
 import {useParams} from "react-router";
-import {IonButton, IonInput, IonItem} from "@ionic/react";
-import {useEffect, useMemo, useState} from "react";
+import {IonInput, IonItem} from "@ionic/react";
+import React, {useEffect, useMemo, useState} from "react";
 
 const Note: React.FC = () => {
     const updateContent = useNoteStore((s) => s.updateNote);
@@ -18,13 +16,15 @@ const Note: React.FC = () => {
             return n.id === id;
         })
     }, [notes, id]);
-    const [title, setTitle] = useState(note.title || "New Note");
-    const [content, setContent] = useState(note.content || "");
+    const [title, setTitle] = useState(note?.title || "New Note");
+    const [content, setContent] = useState(note?.content || "");
 
     const updateNote = () => {
         updateContent(id, title, content);
     };
     useEffect(()=> {
+        // setTitle(title);
+        // setContent(content);
         updateNote();
     }, [id, title, content]);
 
@@ -47,10 +47,7 @@ const Note: React.FC = () => {
                     },
                 }}
                 data={content}
-                onReady={editor => {
-
-                }}
-                onChange={(event) => {
+                onChange={() => {
 
                 }}
                 onBlur={(event, editor) => {
@@ -58,7 +55,7 @@ const Note: React.FC = () => {
                     const data = editor.getData();
                     setContent(data);
                 }}
-                onFocus={(event, editor) => {
+                onFocus={() => {
 
                 }}
             />

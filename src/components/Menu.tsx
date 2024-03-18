@@ -112,7 +112,7 @@ const Menu: React.FC = () => {
                         notes.map((note, index) => {
                             return (
                                 <IonMenuToggle key={index} autoHide={false}>
-                                    <IonItem className={location.pathname === note.id ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" lines="none" detail={false}>
+                                    <IonItem className={location.pathname === `/notes/${note.id}` ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" lines="none" detail={false}>
                                         <IonLabel>{note.title}</IonLabel>
                                         <IonIcon aria-hidden="true" slot="end" ios={clipboardOutline} md={clipboardSharp} />
                                         <IonButton onClick={deleteNote}>
