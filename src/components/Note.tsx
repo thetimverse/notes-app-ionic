@@ -7,31 +7,32 @@ import {Autosave} from "@ckeditor/ckeditor5-autosave";
 import {useNoteStore} from "@/stores/FileStore";
 import {useParams} from "react-router";
 import {IonButton, IonInput, IonItem} from "@ionic/react";
+import {useEffect, useMemo, useState} from "react";
 
-interface ContainerProps {
-    name: string;
-    // TODO: what is the correct way to write this?
-    note: NoteState["notes"];
-}
-
-const Note: React.FC<ContainerProps> = ({name, note}) => {
+const Note: React.FC = () => {
     const updateContent = useNoteStore((s) => s.updateNote);
+    const notes = useNoteStore((s) => s.notes);
     const {id} = useParams<{ id: string; }>();
+    const note = useMemo(() => {
+        return notes.filter((n)=> {
+            return n.id === id;
+        })
+    }, [notes, id]);
+    const [title, setTitle] = useState(note.title || "New Note");
+    const [content, setContent] = useState(note.content || "");
 
-    const getTitle = (title: string) => {
-        return title;
-    }
-    const updateNote = (id: string, title: string | undefined, content: string | undefined) => {
-        const updatedAt = new Date().toISOString();
-        updateContent(id, title, content, updatedAt);
-        console.log(updateContent);
-    }
+    const updateNote = () => {
+        updateContent(id, title, content);
+    };
+    useEffect(()=> {
+        updateNote();
+    }, [id, title, content]);
 
     return (
         <div className="container">
             <IonItem>
                 <IonInput label="Title" labelPlacement="floating"
-                          onIonChange={(e: any) => getTitle(e.target.value)}></IonInput>
+                          onIonChange={(e: any) => setTitle(e.target.value)} value={title}></IonInput>
             </IonItem>
             <CKEditor
                 editor={ClassicEditor}
@@ -45,9 +46,9 @@ const Note: React.FC<ContainerProps> = ({name, note}) => {
                         ]
                     },
                 }}
-                data={`${note.content}`}
+                data={content}
                 onReady={editor => {
-                    
+
                 }}
                 onChange={(event) => {
 
@@ -55,13 +56,7 @@ const Note: React.FC<ContainerProps> = ({name, note}) => {
                 onBlur={(event, editor) => {
                     console.log('Blur.', editor);
                     const data = editor.getData();
-                    const updatedAt = new Date().toISOString();
-                    const title = getTitle("newTitle");
-
-                    console.log(data);
-                    updateContent(id, title, data, updatedAt);
-                    updateNote(id, title, data);
-                    console.log(updateContent);
+                    setContent(data);
                 }}
                 onFocus={(event, editor) => {
 

@@ -34,6 +34,8 @@ import {Button} from "@/components/ui/button";
 import Page from "@/pages/Page";
 import styled from "@emotion/styled";
 import { v4 as uuid } from 'uuid';
+import {useEffect} from "react";
+import {useParams} from "react-router";
 
 interface AppPage {
     url: string;
@@ -82,12 +84,21 @@ const Menu: React.FC = () => {
     const deleteTheNote = useNoteStore((s) => s.deleteNote);
     const notes = useNoteStore((s) => s.notes);
     const navigate = useIonRouter();
+    const {id} = useParams<{ id: string; }>();
 
     const addNewNote = () => {
         const id = uuid();
         const updatedAt = new Date().toISOString();
-        addNote(id, updatedAt);
+        const title = "New Note";
+        const content = "";
+        addNote(id, title, content, updatedAt);
+        console.log(id, title, content, updatedAt);
+        console.log("notes:", notes)
         navigate.push(`/notes/${id}`);
+    };
+
+    const deleteNote = () => {
+        deleteTheNote(id);
     };
 
     return (
@@ -99,16 +110,10 @@ const Menu: React.FC = () => {
                     <StIonButton onClick={addNewNote}>New Note</StIonButton>
                     {
                         notes.map((note, index) => {
-                            const deleteNote = () => {
-                                console.log("note deleted");
-                                deleteTheNote(`${note.id}`);
-                                console.log(note.id);
-                            };
-
                             return (
                                 <IonMenuToggle key={index} autoHide={false}>
                                     <IonItem className={location.pathname === note.id ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" lines="none" detail={false}>
-                                        <IonLabel>{note.id}</IonLabel>
+                                        <IonLabel>{note.title}</IonLabel>
                                         <IonIcon aria-hidden="true" slot="end" ios={clipboardOutline} md={clipboardSharp} />
                                         <IonButton onClick={deleteNote}>
                                             <IonIcon aria-hidden="true" slot="end" ios={trashOutline} md={trashSharp}  />
