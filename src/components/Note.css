@@ -18,6 +18,35 @@
     padding-bottom: 2em;
 }
 
+@media (prefers-color-scheme: dark) {
+    .ck.ck-editor__main > .ck-editor__editable {
+        background: #2a2a2a !important;
+    }
+
+    .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+        border-color: transparent !important;
+    }
+
+    .ck.ck-toolbar {
+        background: #363636 !important;
+        border: transparent !important;
+    }
+
+    .ck-reset_all :not(.ck-reset_all-excluded *) {
+        color: #fff !important;
+    }
+
+    .ck.ck-button:not(.ck-disabled):hover, a.ck.ck-button:not(.ck-disabled):hover, .ck.ck-dropdown__panel, .ck.ck-dropdown__panel-visible {
+        background: #2a2a2a !important;
+    }
+
+    /* TODO: les boutons ne sont pas touchés */
+    .ck.ck-toolbar.ck.ck-button.ck-on:not(.ck-disabled):active, a.ck.ck-button.ck-on:not(.ck-disabled):active, .ck.ck-toolbar .ck .ck-button .ck-on {
+        background: #363636 !important;
+        color: #1a1a1a !important;
+    }
+}
+
 @media (min-width: 1400px) {
     .container {
         max-width: 1400px;

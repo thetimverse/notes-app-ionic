@@ -85,11 +85,9 @@ const Menu: React.FC = () => {
     const addNote = useNoteStore((s) => s.addNote);
     const deleteTheNote = useNoteStore((s) => s.deleteNote);
     const notes = useNoteStore((s) => s.notes);
-/*    function sortNotes (notes) {
-        let test = [...notes];
-        test.sort((a,b) => new Date(a.updatedAt) - new Date(b.createdAt)
-    };
-    const sortedNotes = notes.sort(myCompareFunc);*/
+    const sortedNotes = notes.sort((a,b) => {
+        return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+    });
     const {id} = useParams<{ id: string; }>();
     const note = useMemo(() => {
         return notes.find((n)=> {
@@ -106,13 +104,6 @@ const Menu: React.FC = () => {
         addNote(id, title, content, updatedAt);
         navigate.push(`/notes/${id}`);
     };
-
-    const sortedData = notes.sort((a,b) => {
-        return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
-    });
-    console.log(sortedData)
-
-    const [noteToDelete, setDeletedNote] = useState(note?.id);
     const deleteNote = () => {
         deleteTheNote(id);
     };
@@ -128,8 +119,8 @@ const Menu: React.FC = () => {
 
                     <StIonButton onClick={addNewNote}>New Note</StIonButton>
                     {
-                        sortedData.toReversed().map((note, index) => {
-                            const result = formatDistanceStrict(note.updatedAt, new Date(), {
+                        sortedNotes.toReversed().map((note, index) => {
+                            const timeSinceUpdate = formatDistanceStrict(note.updatedAt, new Date(), {
                                 addSuffix: true
                             })
 
@@ -138,8 +129,8 @@ const Menu: React.FC = () => {
                                     <IonItemSliding>
                                         <IonItem className={location.pathname === `/notes/${note.id}` ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" detail={true} lines={"inset"}>
                                             <IonLabel>
-                                                <h2>{note.title}</h2>
-                                                <p>{ result }</p>
+                                                <h2>{ note.title }</h2>
+                                                <p>{ timeSinceUpdate }</p>
                                             </IonLabel>
                                         </IonItem>
                                         <IonItemOptions slot="end">

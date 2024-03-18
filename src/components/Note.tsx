@@ -30,9 +30,10 @@ const Note: React.FC = () => {
 
     return (
         <div className="container">
-            <IonItem>
+            <IonItem lines={"none"}>
                 <IonInput label="Title" labelPlacement="floating"
-                          onIonChange={(e: any) => setTitle(e.target.value)} value={title}></IonInput>
+                          onIonChange={(e: any) => setTitle(e.target.value)} value={title}
+                ></IonInput>
             </IonItem>
             <CKEditor
                 editor={ClassicEditor}
@@ -40,7 +41,6 @@ const Note: React.FC = () => {
                     toolbar: {
                         items: [
                             'undo', 'redo',
-                            '|', 'heading',
                             '|', 'bold', 'italic',
                             '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
                         ]
