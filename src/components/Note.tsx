@@ -10,70 +10,63 @@ import {IonButton, IonInput, IonItem} from "@ionic/react";
 
 interface ContainerProps {
     name: string;
+    // TODO: what is the correct way to write this?
+    note: NoteState["notes"];
 }
 
-const Note: React.FC<ContainerProps> = ({name}) => {
-    const notes = useNoteStore((s) => s.notes);
+const Note: React.FC<ContainerProps> = ({name, note}) => {
     const updateContent = useNoteStore((s) => s.updateNote);
     const {id} = useParams<{ id: string; }>();
-    console.log(id);
 
     const getTitle = (title: string) => {
         return title;
     }
-    const updateNote = () => {
+    const updateNote = (id: string, title: string | undefined, content: string | undefined) => {
         const updatedAt = new Date().toISOString();
-        const title = getTitle("title");
-        const content = "Hello";
-
         updateContent(id, title, content, updatedAt);
-        console.log(title);
+        console.log(updateContent);
     }
 
     return (
         <div className="container">
             <IonItem>
-                <IonInput label="Title" labelPlacement="floating" onIonChange={(e: any) => getTitle(e.target.value)}></IonInput>
+                <IonInput label="Title" labelPlacement="floating"
+                          onIonChange={(e: any) => getTitle(e.target.value)}></IonInput>
             </IonItem>
-            {
-                notes.map((note, index) => {
-                    return (
-                        <CKEditor
-                            key={index}
-                            editor={ClassicEditor}
-                            config={{
-                                toolbar: {
-                                    items: [
-                                        'undo', 'redo',
-                                        '|', 'heading',
-                                        '|', 'bold', 'italic',
-                                        '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
-                                    ]
-                                },
-                            }}
-                            data={`${note.content}`}
-                            onReady={editor => {
-                                console.log(note.content)
-                            }}
-                            onChange={(event) => {
+            <CKEditor
+                editor={ClassicEditor}
+                config={{
+                    toolbar: {
+                        items: [
+                            'undo', 'redo',
+                            '|', 'heading',
+                            '|', 'bold', 'italic',
+                            '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
+                        ]
+                    },
+                }}
+                data={`${note.content}`}
+                onReady={editor => {
+                    
+                }}
+                onChange={(event) => {
 
-                            }}
-                            onBlur={(event, editor) => {
-                                console.log('Blur.', editor);
-                                const data = editor.getData();
-                                const updatedAt = new Date().toISOString();
-                                console.log(data);
-                                updateContent(id, data, updatedAt);
-                                console.log(updateContent);
-                            }}
-                            onFocus={(event, editor) => {
-                                console.log('Focus.', editor);
-                            }}
-                        />
-                    )
-                })
-            }
-            <IonButton onClick={updateNote}>Update content</IonButton>
+                }}
+                onBlur={(event, editor) => {
+                    console.log('Blur.', editor);
+                    const data = editor.getData();
+                    const updatedAt = new Date().toISOString();
+                    const title = getTitle("newTitle");
+
+                    console.log(data);
+                    updateContent(id, title, data, updatedAt);
+                    updateNote(id, title, data);
+                    console.log(updateContent);
+                }}
+                onFocus={(event, editor) => {
+
+                }}
+            />
         </div>
     );
 };

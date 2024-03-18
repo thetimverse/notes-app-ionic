@@ -3,9 +3,11 @@ import { useParams } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
 import Note from "@/components/Note";
+import {useNoteStore} from "@/stores/FileStore";
 
 const Page: React.FC = () => {
     const { name } = useParams<{ name: string; }>();
+    const notes = useNoteStore((s) => s.notes);
 
     return (
         <IonPage>
@@ -24,7 +26,11 @@ const Page: React.FC = () => {
                         <IonTitle size="large">{name}</IonTitle>
                     </IonToolbar>
                 </IonHeader>
-                <Note name={name} />
+                {
+                    notes.map((note, index) => {
+                        return <Note name={name} key={index} note={note}/>
+                    })
+                }
             </IonContent>
         </IonPage>
     );
