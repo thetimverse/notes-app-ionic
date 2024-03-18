@@ -12,7 +12,7 @@ const Note: React.FC = () => {
     const notes = useNoteStore((s) => s.notes);
     const {id} = useParams<{ id: string; }>();
     const note = useMemo(() => {
-        return notes.filter((n)=> {
+        return notes.find((n)=> {
             return n.id === id;
         })
     }, [notes, id]);
@@ -51,7 +51,6 @@ const Note: React.FC = () => {
 
                 }}
                 onBlur={(event, editor) => {
-                    console.log('Blur.', editor);
                     const data = editor.getData();
                     setContent(data);
                 }}
