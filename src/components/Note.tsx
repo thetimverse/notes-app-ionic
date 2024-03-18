@@ -21,13 +21,10 @@ const Note: React.FC<ContainerProps> = ({name, note}) => {
     const getTitle = (title: string) => {
         return title;
     }
-    const updateNote = () => {
+    const updateNote = (id: string, title: string | undefined, content: string | undefined) => {
         const updatedAt = new Date().toISOString();
-        const title = getTitle("title");
-        const content = "Hello";
-
         updateContent(id, title, content, updatedAt);
-        console.log(title);
+        console.log(updateContent);
     }
 
     return (
@@ -37,7 +34,6 @@ const Note: React.FC<ContainerProps> = ({name, note}) => {
                           onIonChange={(e: any) => getTitle(e.target.value)}></IonInput>
             </IonItem>
             <CKEditor
-
                 editor={ClassicEditor}
                 config={{
                     toolbar: {
@@ -51,7 +47,7 @@ const Note: React.FC<ContainerProps> = ({name, note}) => {
                 }}
                 data={`${note.content}`}
                 onReady={editor => {
-                    console.log(note.content)
+                    
                 }}
                 onChange={(event) => {
 
@@ -60,15 +56,17 @@ const Note: React.FC<ContainerProps> = ({name, note}) => {
                     console.log('Blur.', editor);
                     const data = editor.getData();
                     const updatedAt = new Date().toISOString();
+                    const title = getTitle("newTitle");
+
                     console.log(data);
-                    updateContent(id, data, updatedAt);
+                    updateContent(id, title, data, updatedAt);
+                    updateNote(id, title, data);
                     console.log(updateContent);
                 }}
                 onFocus={(event, editor) => {
-                    console.log('Focus.', editor);
+
                 }}
             />
-            <IonButton onClick={updateNote}>Update content</IonButton>
         </div>
     );
 };
