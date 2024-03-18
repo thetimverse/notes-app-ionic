@@ -2,7 +2,7 @@ import {
     IonButton,
     IonContent,
     IonIcon,
-    IonItem,
+    IonItem, IonItemOption, IonItemOptions, IonItemSliding,
     IonLabel,
     IonList,
     IonListHeader,
@@ -22,7 +22,7 @@ import {
     mailOutline,
     mailSharp,
     paperPlaneOutline,
-    paperPlaneSharp,
+    paperPlaneSharp, pin, share, trash,
     trashOutline,
     trashSharp,
     warningOutline,
@@ -34,8 +34,10 @@ import {Button} from "@/components/ui/button";
 import Page from "@/pages/Page";
 import styled from "@emotion/styled";
 import { v4 as uuid } from 'uuid';
-import {useEffect} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {useParams} from "react-router";
+import * as dayjs from 'dayjs';
+import {format, formatDistanceStrict} from 'date-fns';
 
 interface AppPage {
     url: string;
@@ -83,8 +85,18 @@ const Menu: React.FC = () => {
     const addNote = useNoteStore((s) => s.addNote);
     const deleteTheNote = useNoteStore((s) => s.deleteNote);
     const notes = useNoteStore((s) => s.notes);
-    const navigate = useIonRouter();
+/*    function sortNotes (notes) {
+        let test = [...notes];
+        test.sort((a,b) => new Date(a.updatedAt) - new Date(b.createdAt)
+    };
+    const sortedNotes = notes.sort(myCompareFunc);*/
     const {id} = useParams<{ id: string; }>();
+    const note = useMemo(() => {
+        return notes.find((n)=> {
+            return n.id === id;
+        })
+    }, [notes, id]);
+    const navigate = useIonRouter();
 
     const addNewNote = () => {
         const id = uuid();
@@ -92,48 +104,65 @@ const Menu: React.FC = () => {
         const title = "New Note";
         const content = "";
         addNote(id, title, content, updatedAt);
-        console.log(id, title, content, updatedAt);
-        console.log("notes:", notes)
         navigate.push(`/notes/${id}`);
     };
 
+    const sortedData = notes.sort((a,b) => {
+        return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+    });
+    console.log(sortedData)
+
+    const [noteToDelete, setDeletedNote] = useState(note?.id);
     const deleteNote = () => {
         deleteTheNote(id);
     };
+    // useEffect(()=> {
+    //     deleteNote();
+    // }, [id]);
 
     return (
         <IonMenu contentId="main" type="overlay">
             <IonContent>
-                <IonList id="inbox-list">
+                <IonList id="inbox-list" inset={true}>
                     <IonListHeader>Notes App</IonListHeader>
 
                     <StIonButton onClick={addNewNote}>New Note</StIonButton>
                     {
-                        notes.map((note, index) => {
+                        sortedData.toReversed().map((note, index) => {
+                            const result = formatDistanceStrict(note.updatedAt, new Date(), {
+                                addSuffix: true
+                            })
+
                             return (
                                 <IonMenuToggle key={index} autoHide={false}>
-                                    <IonItem className={location.pathname === `/notes/${note.id}` ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" lines="none" detail={false}>
-                                        <IonLabel>{note.title}</IonLabel>
-                                        <IonIcon aria-hidden="true" slot="end" ios={clipboardOutline} md={clipboardSharp} />
-                                        <IonButton onClick={deleteNote}>
-                                            <IonIcon aria-hidden="true" slot="end" ios={trashOutline} md={trashSharp}  />
-                                        </IonButton>
-                                    </IonItem>
+                                    <IonItemSliding>
+                                        <IonItem className={location.pathname === `/notes/${note.id}` ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" detail={true} lines={"inset"}>
+                                            <IonLabel>
+                                                <h2>{note.title}</h2>
+                                                <p>{ result }</p>
+                                            </IonLabel>
+                                        </IonItem>
+                                        <IonItemOptions slot="end">
+                                            <IonItemOption color="danger" expandable={true} onClick={deleteNote}>
+                                                <IonIcon slot="icon-only" ios={trashOutline} md={trashSharp}></IonIcon>
+                                            </IonItemOption>
+                                        </IonItemOptions>
+                                    </IonItemSliding>
                                 </IonMenuToggle>
                             );
                         })
                     }
                 </IonList>
 
-                <IonList id="labels-list">
-                    <IonListHeader>Tags</IonListHeader>
-                    {labels.map((label, index) => (
-                        <IonItem lines="none" key={index}>
-                            <IonIcon aria-hidden="true" slot="start" icon={bookmarkOutline} />
-                            <IonLabel>{label}</IonLabel>
-                        </IonItem>
-                    ))}
-                </IonList>
+                {/*<IonList id="labels-list">*/}
+                {/*    <IonListHeader>Tags</IonListHeader>*/}
+                {/*    {labels.map((label, index) => (*/}
+                {/*        <IonItem lines="none" key={index}>*/}
+                {/*            <IonIcon aria-hidden="true" slot="start" icon={bookmarkOutline} />*/}
+                {/*            <IonLabel>{label}</IonLabel>*/}
+                {/*        </IonItem>*/}
+                {/*    ))}*/}
+                {/*</IonList>*/}
             </IonContent>
         </IonMenu>
     );

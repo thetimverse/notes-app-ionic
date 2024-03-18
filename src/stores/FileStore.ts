@@ -4,7 +4,7 @@ import type {} from '@redux-devtools/extension';
 import {immer} from 'zustand/middleware/immer';
 
 interface NoteState {
-    notes: { id: string, title: string, content: string, createdAt?: string, updatedAt: string, tags?: string }[],
+    notes: { id: string, title: string, content: string, createdAt?: string, updatedAt: string, tags?: { name: string }[] }[],
     addNote: (id: string, title: string, content: string, updatedAt: string) => void,
     updateNote: (id: string, title: string, content: string, updatedAt?: string) => void,
     deleteNote: (id: string) => void,
