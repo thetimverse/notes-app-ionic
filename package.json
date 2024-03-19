@@ -12,6 +12,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ark-ui/react": "^2.2.3",
     "@capacitor/app": "5.0.7",
     "@capacitor/core": "5.7.2",
     "@capacitor/filesystem": "^5.2.1",

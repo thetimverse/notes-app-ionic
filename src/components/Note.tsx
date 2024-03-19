@@ -7,6 +7,7 @@ import {useParams} from "react-router";
 import {IonButton, IonInput, IonItem} from "@ionic/react";
 import React, {useEffect, useMemo, useState} from "react";
 import {Tag} from "@/types";
+import { TagsInput } from '@ark-ui/react'
 
 const Note: React.FC = () => {
     const updateContent = useNoteStore((s) => s.updateNote);
@@ -68,6 +69,24 @@ const Note: React.FC = () => {
                           onIonChange={(e: any) => setTagName(e.target.value)} value={tagName}
                 ></IonInput>
             </IonItem>
+            <TagsInput.Root defaultValue={['React', 'Solid', 'Vue']}>
+                {(api) => (
+                    <>
+                        <TagsInput.Label>Tags</TagsInput.Label>
+                        <TagsInput.Control>
+                            {api.value.map((value, index) => (
+                                <TagsInput.Item key={index} index={index} value={value}>
+                                    <TagsInput.ItemInput />
+                                    <TagsInput.ItemText>{value} </TagsInput.ItemText>
+                                    <TagsInput.ItemDeleteTrigger> x</TagsInput.ItemDeleteTrigger>
+                                </TagsInput.Item>
+                            ))}
+                        </TagsInput.Control>
+                        <TagsInput.Input placeholder="Add tag" />
+                        <TagsInput.ClearTrigger>Clear all</TagsInput.ClearTrigger>
+                    </>
+                )}
+            </TagsInput.Root>
             <IonButton onClick={() => {
                 setTags([
                     ...tags,
