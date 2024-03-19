@@ -18,7 +18,7 @@ import {
     bookmarkOutline,
     clipboardOutline, clipboardSharp,
     heartOutline,
-    heartSharp,
+    heartSharp, listCircle,
     mailOutline,
     mailSharp,
     paperPlaneOutline,
@@ -85,7 +85,9 @@ const Menu: React.FC = () => {
     const addNote = useNoteStore((s) => s.addNote);
     const deleteTheNote = useNoteStore((s) => s.deleteNote);
     const notes = useNoteStore((s) => s.notes);
-    const sortedNotes = notes.sort((a,b) => {
+    const state = useNoteStore();
+    const notesToSort = [...state.notes];
+    const sortedNotes = notesToSort.sort((a,b) => {
         return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
     });
     const {id} = useParams<{ id: string; }>();
@@ -106,10 +108,11 @@ const Menu: React.FC = () => {
     };
     const deleteNote = () => {
         deleteTheNote(id);
+        navigate.push("/deleted");
     };
-    // useEffect(()=> {
-    //     deleteNote();
-    // }, [id]);
+/*    useEffect(()=> {
+        deleteNote();
+    }, [id]);*/
 
     return (
         <IonMenu contentId="main" type="overlay">
@@ -154,6 +157,29 @@ const Menu: React.FC = () => {
                 {/*        </IonItem>*/}
                 {/*    ))}*/}
                 {/*</IonList>*/}
+                <IonList inset={true}>
+                    <IonListHeader>Tags</IonListHeader>
+                    <IonItem button={true}>
+                        <IonIcon color="danger" slot="start" icon={listCircle} size="large"></IonIcon>
+                        <IonLabel>General</IonLabel>
+                        <IonNote slot="end">6</IonNote>
+                    </IonItem>
+                    <IonItem button={true}>
+                        <IonIcon color="tertiary" slot="start" icon={listCircle} size="large"></IonIcon>
+                        <IonLabel>Shopping</IonLabel>
+                        <IonNote slot="end">15</IonNote>
+                    </IonItem>
+                    <IonItem button={true}>
+                        <IonIcon color="success" slot="start" icon={listCircle} size="large"></IonIcon>
+                        <IonLabel>Cleaning</IonLabel>
+                        <IonNote slot="end">3</IonNote>
+                    </IonItem>
+                    <IonItem button={true}>
+                        <IonIcon color="warning" slot="start" icon={listCircle} size="large"></IonIcon>
+                        <IonLabel>Reminders</IonLabel>
+                        <IonNote slot="end">8</IonNote>
+                    </IonItem>
+                </IonList>
             </IonContent>
         </IonMenu>
     );

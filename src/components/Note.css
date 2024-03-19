@@ -40,7 +40,6 @@
         background: #2a2a2a !important;
     }
 
-    /* TODO: les boutons ne sont pas touchés */
     .ck.ck-button.ck-on, a.ck.ck-button.ck-on {
         background: #4d4d4d !important;
         color: #1a1a1a !important;

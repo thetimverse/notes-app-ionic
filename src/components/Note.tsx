@@ -18,13 +18,17 @@ const Note: React.FC = () => {
     }, [notes, id]);
     const [title, setTitle] = useState(note?.title || "New Note");
     const [content, setContent] = useState(note?.content || "");
+    const tag = useMemo(() => {
+        return notes.find((t)=> {
+            return t.tags === name;
+        })
+    }, [notes, id]);
+    const [tags, setTags] = useState(note?.tags || "");
 
     const updateNote = () => {
         updateContent(id, title, content);
     };
     useEffect(()=> {
-        // setTitle(title);
-        // setContent(content);
         updateNote();
     }, [id, title, content]);
 
@@ -33,6 +37,11 @@ const Note: React.FC = () => {
             <IonItem lines={"none"}>
                 <IonInput label="Title" labelPlacement="floating"
                           onIonChange={(e: any) => setTitle(e.target.value)} value={title}
+                ></IonInput>
+            </IonItem>
+            <IonItem lines={"none"}>
+                <IonInput label="Tags" labelPlacement="floating"
+                          onIonChange={(e: any) => setTags(e.target.value)}
                 ></IonInput>
             </IonItem>
             <CKEditor
@@ -53,6 +62,7 @@ const Note: React.FC = () => {
                 onBlur={(event, editor) => {
                     const data = editor.getData();
                     setContent(data);
+                    console.log(tags);
                 }}
                 onFocus={() => {
 
