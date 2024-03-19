@@ -30,6 +30,7 @@ import './theme/variables.css';
 import Page from "@/pages/Page";
 import Menu from "@/components/Menu";
 import './App.css';
+import Deleted from "@/pages/Deleted";
 
 setupIonicReact();
 
@@ -44,6 +45,9 @@ const App: React.FC = () => (
             </Route>
             <Route path="/notes" exact={true}>
               <Page />
+            </Route>
+            <Route path="/deleted" exact={true}>
+              <Deleted />
             </Route>
             <Route path="/notes/:id" exact={true}>
               <Page />
