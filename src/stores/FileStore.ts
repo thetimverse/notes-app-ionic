@@ -2,12 +2,14 @@ import {create} from 'zustand';
 import {createJSONStorage, devtools, persist} from 'zustand/middleware';
 import type {} from '@redux-devtools/extension';
 import {immer} from 'zustand/middleware/immer';
+import {Note} from "@/types";
 
 interface NoteState {
-    notes: { id: string, title: string, content: string, createdAt?: string, updatedAt: string, tags?: { id: string, name: string }[] }[],
-    addNote: (id: string, title: string, content: string, updatedAt: string) => void,
-    updateNote: (id: string, title: string, content: string, updatedAt?: string, tags?: { id: string, name: string }[]) => void,
-    deleteNote: (id: string) => void,
+    notes: Note[],
+    addNote: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt: Note["updatedAt"]) => void,
+    addTag?: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt: Note["updatedAt"]) => void,
+    updateNote: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt?: Note["updatedAt"], tags?: Note["tags"]) => void,
+    deleteNote: (id: Note["id"]) => void,
 }
 
 export const useNoteStore = create(
@@ -28,7 +30,8 @@ export const useNoteStore = create(
                         ],
                     })
                 ),
-                updateNote: (id, title, content, tags) => {
+                //addTag: ,
+                updateNote: (id, title, content, updatedAt, tags) => {
                     set((state) => {
                         const notes = [...state.notes];
                         // const tags = [{name}];
@@ -37,9 +40,18 @@ export const useNoteStore = create(
                         });
                         const note = notes[noteIndex];
                         const updatedAt = new Date().toISOString();
-                        notes.splice(notes.findIndex((n) => {
-                            return n.id === id;
-                        }), 1, {...note, title, content, updatedAt});
+                        notes.splice(
+                            notes.findIndex((n) => {
+                                return n.id === id;
+                            }),
+                            1,
+                            {
+                                ...note,
+                                title,
+                                content,
+                                updatedAt,
+                                tags: tags || []
+                            });
                         return {notes};
                     });
                 },
@@ -49,7 +61,7 @@ export const useNoteStore = create(
                         return n.id === id;
                     }), 1);
                     return {notes};
-                })
+                }),
             })
         ),
         {

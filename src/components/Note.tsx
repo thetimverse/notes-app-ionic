@@ -4,8 +4,9 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import './Note.css';
 import {useNoteStore} from "@/stores/FileStore";
 import {useParams} from "react-router";
-import {IonInput, IonItem} from "@ionic/react";
+import {IonButton, IonInput, IonItem} from "@ionic/react";
 import React, {useEffect, useMemo, useState} from "react";
+import {Tag} from "@/types";
 
 const Note: React.FC = () => {
     const updateContent = useNoteStore((s) => s.updateNote);
@@ -18,19 +19,42 @@ const Note: React.FC = () => {
     }, [notes, id]);
     const [title, setTitle] = useState(note?.title || "New Note");
     const [content, setContent] = useState(note?.content || "");
-    const tag = useMemo(() => {
-        return notes.find((t)=> {
-            return t.tags === name;
-        })
-    }, [notes, id]);
-    const [tags, setTags] = useState(note?.tags || "");
+    const [tags, setTags] = useState([] as Array<Tag>|| []);
+    const [tag, setTag] = useState([] as Array<Tag>|| []);
+    const [tagName, setTagName] = useState('');
+    const [tagId, setTagId] = useState('');
+    let nextId = 0;
 
     const updateNote = () => {
         updateContent(id, title, content);
     };
+
+    // const addTag = (tag, id) => {
+    //     setTag((prev) => produce(prev, (draft) => {
+    //         const index = draft.findIndex((el) => el.id === id)
+    //         draft[index].tags.push(tag)
+    //     }))
+    // }
+
+    // const handleMarkComplete = () => {
+    //     let id = 0;
+    //     // 1. Find the todo with the provided id
+    //     const currentTodoIndex = tags.findIndex((tag) => tag.id === id);
+    //     // 2. Mark the todo as complete
+    //     const updatedTodo = {...tags[currentTodoIndex]};
+    //     // 3. Update the todo list with the updated todo
+    //     const newTodos = [
+    //         ...tags.slice(0, currentTodoIndex),
+    //         updatedTodo,
+    //         ...tags.slice(currentTodoIndex + 1)
+    //     ];
+    //     setTags(newTodos);
+    // };
+
     useEffect(()=> {
         updateNote();
-    }, [id, title, content]);
+        console.log(tags);
+    }, [id, title, content, tags]);
 
     return (
         <div className="container">
@@ -41,9 +65,15 @@ const Note: React.FC = () => {
             </IonItem>
             <IonItem lines={"none"}>
                 <IonInput label="Tags" labelPlacement="floating"
-                          onIonChange={(e: any) => setTags(e.target.value)}
+                          onIonChange={(e: any) => setTagName(e.target.value)} value={tagName}
                 ></IonInput>
             </IonItem>
+            <IonButton onClick={() => {
+                setTags([
+                    ...tags,
+                    { id: nextId++, name: tagName }
+                ])
+            }}>New tag</IonButton>
             <CKEditor
                 editor={ClassicEditor}
                 config={{
