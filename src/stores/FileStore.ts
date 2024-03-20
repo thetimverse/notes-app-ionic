@@ -7,8 +7,7 @@ import {Note} from "@/types";
 interface NoteState {
     notes: Note[],
     addNote: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt: Note["updatedAt"]) => void,
-    addTag?: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt: Note["updatedAt"]) => void,
-    updateNote: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt?: Note["updatedAt"], tags?: Note["tags"]) => void,
+    updateNote: (id: Note["id"], title: Note["title"], content: Note["content"], tags: Note["tags"], updatedAt?: Note["updatedAt"]) => void,
     deleteNote: (id: Note["id"]) => void,
 }
 
@@ -30,8 +29,7 @@ export const useNoteStore = create(
                         ],
                     })
                 ),
-                //addTag: ,
-                updateNote: (id, title, content, updatedAt, tags) => {
+                updateNote: (id, title, content, tags, updatedAt) => {
                     set((state) => {
                         const notes = [...state.notes];
                         const noteIndex = notes.findIndex((n) => {
