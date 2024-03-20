@@ -8,7 +8,7 @@ import {
     IonListHeader,
     IonMenu,
     IonMenuToggle,
-    IonNote, useIonRouter,
+    IonNote, IonToolbar, useIonRouter,
 } from '@ionic/react';
 
 import {Route, useLocation} from 'react-router-dom';
@@ -74,7 +74,7 @@ const appPages: AppPage[] = [
 ];
 
 const StIonButton = styled(IonButton)`
-    margin-left: 1em;
+    //margin-left: 10px;
     margin-bottom: 20px;
 `
 
@@ -108,7 +108,9 @@ const Menu: React.FC = () => {
         <IonMenu contentId="main" type="overlay">
             <IonContent>
                 <IonList id="inbox-list" inset={true}>
-                    <IonListHeader>Notes App</IonListHeader>
+                    <IonToolbar>
+                        <IonListHeader>Notes</IonListHeader>
+                    </IonToolbar>
 
                     <StIonButton onClick={addNewNote}>New Note</StIonButton>
                     {

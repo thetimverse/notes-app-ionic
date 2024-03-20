@@ -3,16 +3,37 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import './Note.css';
 import {useNoteStore} from "@/stores/FileStore";
 import {useParams} from "react-router";
-import {IonButton, IonIcon, IonInput, IonItem} from "@ionic/react";
+import {IonButton, IonIcon, IonInput, IonItem, useIonRouter} from "@ionic/react";
 import React, {useEffect, useMemo, useState} from "react";
 import { TagsInput } from '@ark-ui/react'
-import {closeOutline, closeSharp} from "ionicons/icons";
+import {closeOutline, closeSharp, trashOutline, trashSharp} from "ionicons/icons";
+import styled from "@emotion/styled";
+
+const StButton = styled(IonButton)`
+    width: fit-content;
+    align-self: end;
+    margin-bottom: 20px;
+    font-size: 12px;
+`
+const StInputItem = styled(IonItem)`
+    background-color: #f1f1f1 !important;
+    //padding: 0 10px;
+    &:after {
+        background-color: #f1f1f1;
+    }
+`
+const StInput = styled(IonInput)`
+    background-color: #f1f1f1;
+`
 
 let nextId = 0;
+
 const Note: React.FC = () => {
     const {id} = useParams<{ id: string; }>();
+    const navigate = useIonRouter();
     const updateContent = useNoteStore((s) => s.updateNote);
     const deleteTheTag = useNoteStore((s) => s.deleteTag);
+    const deleteTheNote = useNoteStore((s) => s.deleteNote);
     const notes = useNoteStore((s) => s.notes);
     const note = useMemo(() => {
         return notes.find((n)=> {
@@ -39,6 +60,11 @@ const Note: React.FC = () => {
         return tags;
     };
 
+    const deleteNote = (id: string) => {
+        deleteTheNote(id);
+        navigate.push("/deleted");
+    };
+
     const deleteTag = (id: string, tagId: number) => {
         tags.find((tag)=>{
             return tag.id === tagId;
@@ -54,11 +80,15 @@ const Note: React.FC = () => {
 
     return (
         <div className="container">
-            <IonItem lines={"none"}>
-                <IonInput label="Title" labelPlacement="floating"
+            <>
+            <StButton onClick={()=> deleteNote(id)} color={"danger"}>
+                <IonIcon slot="icon-only" ios={trashOutline} md={trashSharp}></IonIcon>
+            </StButton>
+            <StInputItem lines={"none"}>
+                <StInput label="Title" labelPlacement="floating"
                           onIonChange={(e: any) => setTitle(e.target.value)} value={title}
-                ></IonInput>
-            </IonItem>
+                ></StInput>
+            </StInputItem>
             <div className={"tags-input"}>
                 <TagsInput.Root blurBehavior={"add"}>
                     {() => (
@@ -67,7 +97,6 @@ const Note: React.FC = () => {
                                 {
                                     tags.map((tag, index) => (
                                         <TagsInput.Item key={index} index={index} value={tag.name}>
-                                            <TagsInput.ItemInput />
                                             <TagsInput.ItemText>{tag.name} </TagsInput.ItemText>
                                             <TagsInput.ItemDeleteTrigger onClick={()=> deleteTag(id, tag.id)}><IonIcon slot="icon-only" ios={closeOutline} md={closeSharp}></IonIcon></TagsInput.ItemDeleteTrigger>
                                         </TagsInput.Item>
@@ -98,6 +127,7 @@ const Note: React.FC = () => {
                     setContent(data);
                 }}
             />
+            </>
         </div>
     );
 };

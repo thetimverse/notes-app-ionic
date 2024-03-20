@@ -10,7 +10,7 @@ interface NoteState {
     addNote: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt: Note["updatedAt"]) => void,
     updateNote: (id: Note["id"], title: Note["title"], content: Note["content"], tags: Note["tags"], updatedAt?: Note["updatedAt"]) => void,
     deleteNote: (id: Note["id"]) => void,
-    deleteTag: (id: Note["id"], tagId: number, tags?: Note["tags"]) => void,
+    deleteTag: (id: Note["id"], tagId: number) => void,
 }
 
 export const useNoteStore = create(
@@ -64,16 +64,11 @@ export const useNoteStore = create(
                 }),
                 deleteTag: (id, tagId) => set((state) => {
                     const notes = [...state.notes];
-                    // const noteIndex = notes.findIndex((n) => {
-                    //     return n.id === id;
-                    // });
-                    // const note = notes[noteIndex];
                     notes.forEach((note) => {
                         note.tags = note.tags.filter((tag) => {
                             return tag.id != tagId;
                         })
                     });
-                    //return {notes};
                 })
             })
         ),
