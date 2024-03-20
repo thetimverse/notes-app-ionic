@@ -1,6 +1,7 @@
 export type Tag = {
     id: number,
-    name: string
+    name: string,
+    note: string
 }
 
 export type Note = {

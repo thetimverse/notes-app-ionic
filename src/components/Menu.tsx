@@ -110,9 +110,6 @@ const Menu: React.FC = () => {
         deleteTheNote(id);
         navigate.push("/deleted");
     };
-/*    useEffect(()=> {
-        deleteNote();
-    }, [id]);*/
 
     return (
         <IonMenu contentId="main" type="overlay">
@@ -148,37 +145,20 @@ const Menu: React.FC = () => {
                     }
                 </IonList>
 
-                {/*<IonList id="labels-list">*/}
-                {/*    <IonListHeader>Tags</IonListHeader>*/}
-                {/*    {labels.map((label, index) => (*/}
-                {/*        <IonItem lines="none" key={index}>*/}
-                {/*            <IonIcon aria-hidden="true" slot="start" icon={bookmarkOutline} />*/}
-                {/*            <IonLabel>{label}</IonLabel>*/}
-                {/*        </IonItem>*/}
-                {/*    ))}*/}
-                {/*</IonList>*/}
-                <IonList inset={true}>
+                <IonList inset={true} id="labels-list">
                     <IonListHeader>Tags</IonListHeader>
-                    <IonItem button={true}>
-                        <IonIcon color="danger" slot="start" icon={listCircle} size="large"></IonIcon>
-                        <IonLabel>General</IonLabel>
-                        <IonNote slot="end">6</IonNote>
-                    </IonItem>
-                    <IonItem button={true}>
-                        <IonIcon color="tertiary" slot="start" icon={listCircle} size="large"></IonIcon>
-                        <IonLabel>Shopping</IonLabel>
-                        <IonNote slot="end">15</IonNote>
-                    </IonItem>
-                    <IonItem button={true}>
-                        <IonIcon color="success" slot="start" icon={listCircle} size="large"></IonIcon>
-                        <IonLabel>Cleaning</IonLabel>
-                        <IonNote slot="end">3</IonNote>
-                    </IonItem>
-                    <IonItem button={true}>
-                        <IonIcon color="warning" slot="start" icon={listCircle} size="large"></IonIcon>
-                        <IonLabel>Reminders</IonLabel>
-                        <IonNote slot="end">8</IonNote>
-                    </IonItem>
+                    {
+                        note?.tags.map((tag, index) => {
+                            return (
+                                <IonItem button={true} key={index} className={location.pathname === `/notes/${tag.note}` ? 'selected' : ''} routerLink={`/notes/${tag.note}`}>
+                                    <IonIcon color="danger" slot="start" icon={listCircle} size="large"></IonIcon>
+                                    <IonLabel>{tag.name}</IonLabel>
+                                    <IonNote slot="end">6</IonNote>
+                                </IonItem>
+                            )
+                    })
+                    }
+
                 </IonList>
             </IonContent>
         </IonMenu>

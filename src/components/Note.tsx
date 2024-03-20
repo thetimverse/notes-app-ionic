@@ -31,7 +31,7 @@ const Note: React.FC = () => {
         function f() {
             setTags([
                 ...tags,
-                { id: nextId++, name: newTagName }
+                { id: nextId++, name: newTagName, note: id }
             ])
         }
         f();
