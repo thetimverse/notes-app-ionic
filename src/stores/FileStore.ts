@@ -34,7 +34,6 @@ export const useNoteStore = create(
                 updateNote: (id, title, content, updatedAt, tags) => {
                     set((state) => {
                         const notes = [...state.notes];
-                        // const tags = [{name}];
                         const noteIndex = notes.findIndex((n) => {
                             return n.id === id;
                         });
