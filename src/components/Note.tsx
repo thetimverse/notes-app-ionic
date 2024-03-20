@@ -10,9 +10,10 @@ import {closeOutline, closeSharp} from "ionicons/icons";
 
 let nextId = 0;
 const Note: React.FC = () => {
-    const updateContent = useNoteStore((s) => s.updateNote);
-    const notes = useNoteStore((s) => s.notes);
     const {id} = useParams<{ id: string; }>();
+    const updateContent = useNoteStore((s) => s.updateNote);
+    const deleteTheTag = useNoteStore((s) => s.deleteTag);
+    const notes = useNoteStore((s) => s.notes);
     const note = useMemo(() => {
         return notes.find((n)=> {
             return n.id === id;
@@ -38,8 +39,17 @@ const Note: React.FC = () => {
         return tags;
     };
 
+    const deleteTag = (id: string, tagId: number) => {
+        tags.find((tag)=>{
+            return tag.id === tagId;
+        });
+        deleteTheTag(id, tagId);
+        console.log(tagId, tags)
+    }
+
     useEffect(()=> {
         updateNote();
+        // deleteTag(id, tagId);
     }, [id, title, content, tags]);
 
     return (
@@ -50,17 +60,19 @@ const Note: React.FC = () => {
                 ></IonInput>
             </IonItem>
             <div className={"tags-input"}>
-                <TagsInput.Root>
+                <TagsInput.Root blurBehavior={"add"}>
                     {() => (
                         <>
                             <TagsInput.Control>
-                                {tags.map((tag, index) => (
-                                    <TagsInput.Item key={index} index={index} value={tag.name}>
-                                        <TagsInput.ItemInput />
-                                        <TagsInput.ItemText>{tag.name} </TagsInput.ItemText>
-                                        <TagsInput.ItemDeleteTrigger><IonIcon slot="icon-only" ios={closeOutline} md={closeSharp}></IonIcon></TagsInput.ItemDeleteTrigger>
-                                    </TagsInput.Item>
-                                ))}
+                                {
+                                    tags.map((tag, index) => (
+                                        <TagsInput.Item key={index} index={index} value={tag.name}>
+                                            <TagsInput.ItemInput />
+                                            <TagsInput.ItemText>{tag.name} </TagsInput.ItemText>
+                                            <TagsInput.ItemDeleteTrigger onClick={()=> deleteTag(id, tag.id)}><IonIcon slot="icon-only" ios={closeOutline} md={closeSharp}></IonIcon></TagsInput.ItemDeleteTrigger>
+                                        </TagsInput.Item>
+                                    ))
+                                }
                             </TagsInput.Control>
                             <TagsInput.Input placeholder="New tag" onChange={(e: any) => setTagName(e.target.value)} />
                         </>
@@ -81,15 +93,9 @@ const Note: React.FC = () => {
                     },
                 }}
                 data={content}
-                onChange={() => {
-
-                }}
                 onBlur={(event, editor) => {
                     const data = editor.getData();
                     setContent(data);
-                }}
-                onFocus={() => {
-
                 }}
             />
         </div>

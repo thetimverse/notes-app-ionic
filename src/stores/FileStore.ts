@@ -3,12 +3,14 @@ import {createJSONStorage, devtools, persist} from 'zustand/middleware';
 import type {} from '@redux-devtools/extension';
 import {immer} from 'zustand/middleware/immer';
 import {Note} from "@/types";
+import note from "@/components/Note";
 
 interface NoteState {
     notes: Note[],
     addNote: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt: Note["updatedAt"]) => void,
     updateNote: (id: Note["id"], title: Note["title"], content: Note["content"], tags: Note["tags"], updatedAt?: Note["updatedAt"]) => void,
     deleteNote: (id: Note["id"]) => void,
+    deleteTag: (id: Note["id"], tagId: number, tags?: Note["tags"]) => void,
 }
 
 export const useNoteStore = create(
@@ -48,7 +50,8 @@ export const useNoteStore = create(
                                 content,
                                 updatedAt,
                                 tags: tags || []
-                            });
+                            }
+                        );
                         return {notes};
                     });
                 },
@@ -59,6 +62,19 @@ export const useNoteStore = create(
                     }), 1);
                     return {notes};
                 }),
+                deleteTag: (id, tagId) => set((state) => {
+                    const notes = [...state.notes];
+                    // const noteIndex = notes.findIndex((n) => {
+                    //     return n.id === id;
+                    // });
+                    // const note = notes[noteIndex];
+                    notes.forEach((note) => {
+                        note.tags = note.tags.filter((tag) => {
+                            return tag.id != tagId;
+                        })
+                    });
+                    //return {notes};
+                })
             })
         ),
         {

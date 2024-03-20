@@ -73,15 +73,15 @@ const appPages: AppPage[] = [
     },
 ];
 
-const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-
 const StIonButton = styled(IonButton)`
     margin-left: 1em;
     margin-bottom: 20px;
 `
 
 const Menu: React.FC = () => {
+    const {id} = useParams<{ id: string; }>();
     const location = useLocation();
+    const navigate = useIonRouter();
     const addNote = useNoteStore((s) => s.addNote);
     const deleteTheNote = useNoteStore((s) => s.deleteNote);
     const notes = useNoteStore((s) => s.notes);
@@ -90,13 +90,6 @@ const Menu: React.FC = () => {
     const sortedNotes = notesToSort.sort((a,b) => {
         return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
     });
-    const {id} = useParams<{ id: string; }>();
-    const note = useMemo(() => {
-        return notes.find((n)=> {
-            return n.id === id;
-        })
-    }, [notes, id]);
-    const navigate = useIonRouter();
 
     const addNewNote = () => {
         const id = uuid();
@@ -106,7 +99,7 @@ const Menu: React.FC = () => {
         addNote(id, title, content, updatedAt);
         navigate.push(`/notes/${id}`);
     };
-    const deleteNote = () => {
+    const deleteNote = (id: string) => {
         deleteTheNote(id);
         navigate.push("/deleted");
     };
@@ -134,7 +127,7 @@ const Menu: React.FC = () => {
                                             </IonLabel>
                                         </IonItem>
                                         <IonItemOptions slot="end">
-                                            <IonItemOption color="danger" expandable={true} onClick={deleteNote}>
+                                            <IonItemOption color="danger" expandable={true} onClick={() => deleteNote(`${note.id}`)}>
                                                 <IonIcon slot="icon-only" ios={trashOutline} md={trashSharp}></IonIcon>
                                             </IonItemOption>
                                         </IonItemOptions>
@@ -151,10 +144,22 @@ const Menu: React.FC = () => {
                         sortedNotes?.map((note, index) => {
                             return (
                                 note?.tags?.map((tag, index) => {
+                                    const notesWithTag = note?.tags?.filter(
+                                        (t) => t.name === "hello"
+                                    );
                                     return (
                                         <IonItem button={true} key={index} className={location.pathname === `/notes/${tag.note}` ? 'selected' : ''} routerLink={`/notes/${tag.note}`}>
-                                            <IonIcon color="danger" slot="start" icon={listCircle} size="large"></IonIcon>
-                                            <IonLabel>{tag.name}</IonLabel>
+                                            <IonIcon color="primary" slot="start" icon={listCircle} size="large"></IonIcon>
+                                            <IonLabel>
+                                                <h2>{tag.name}</h2>
+                                                {
+                                                    notesWithTag.map((t, index) => {
+                                                        return (
+                                                            <p key={index}>{t.note}</p>
+                                                        )
+                                                    })
+                                                }
+                                            </IonLabel>
                                             <IonNote slot="end">
                                                 {
                                                     note?.tags?.length
