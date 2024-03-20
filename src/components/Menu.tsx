@@ -148,17 +148,24 @@ const Menu: React.FC = () => {
                 <IonList inset={true} id="labels-list">
                     <IonListHeader>Tags</IonListHeader>
                     {
-                        note?.tags.map((tag, index) => {
+                        sortedNotes?.map((note, index) => {
                             return (
-                                <IonItem button={true} key={index} className={location.pathname === `/notes/${tag.note}` ? 'selected' : ''} routerLink={`/notes/${tag.note}`}>
-                                    <IonIcon color="danger" slot="start" icon={listCircle} size="large"></IonIcon>
-                                    <IonLabel>{tag.name}</IonLabel>
-                                    <IonNote slot="end">6</IonNote>
-                                </IonItem>
+                                note?.tags?.map((tag, index) => {
+                                    return (
+                                        <IonItem button={true} key={index} className={location.pathname === `/notes/${tag.note}` ? 'selected' : ''} routerLink={`/notes/${tag.note}`}>
+                                            <IonIcon color="danger" slot="start" icon={listCircle} size="large"></IonIcon>
+                                            <IonLabel>{tag.name}</IonLabel>
+                                            <IonNote slot="end">
+                                                {
+                                                    note?.tags?.length
+                                                }
+                                            </IonNote>
+                                        </IonItem>
+                                    )
+                                })
                             )
-                    })
+                        })
                     }
-
                 </IonList>
             </IonContent>
         </IonMenu>
