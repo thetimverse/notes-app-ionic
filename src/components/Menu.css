@@ -5,24 +5,29 @@ ion-menu ion-content {
 ion-menu.md ion-content {
     --padding-start: 8px;
     --padding-end: 8px;
-    --padding-top: 20px;
+    --padding-top: 0;
     --padding-bottom: 20px;
+    box-shadow: 5px 5px 16px #4d4d4d;
 }
 
 ion-menu.md ion-list {
-    padding: 20px 0;
+
+}
+
+.list-md.list-inset {
+    margin-top: 0;
+}
+
+.list-md {
+    padding-top: 0;
 }
 
 ion-menu.md ion-list-header {
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 
 ion-menu.md ion-list-header, ion-menu.md ion-note {
-    padding-left: 10px;
-}
-
-ion-menu.md ion-list#inbox-list {
-    border-bottom: 1px solid var(--ion-color-step-150, #d7d8da);
+    padding-left: 0;
 }
 
 ion-menu.md ion-list#inbox-list ion-list-header {
@@ -130,4 +135,27 @@ ion-note {
     display: inline-block;
     font-size: 16px;
     color: var(--ion-color-medium-shade);
+}
+
+ion-menu::part(backdrop) {
+    background-color: #2a2a2a;
+}
+
+ion-menu::part(container) {
+    /*border-right: #4d4d4d 1px solid;*/
+    box-shadow: 5px 5px 16px #4d4d4d;
+    z-index: 1;
+}
+
+ion-menu::part(container) {
+    /*box-shadow: 4px 0px 16px rgba(255, 0, 255, 0.18);*/
+}
+
+ion-split-pane {
+    --border: 1px dashed #b3baff;
+}
+
+ion-menu::part(container).show-menu {
+    border-radius: 0 10px 10px 0;
+    box-shadow: 4px 0 16px var(--ion-color-primary);
 }
