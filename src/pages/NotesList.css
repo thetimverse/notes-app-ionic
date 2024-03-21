@@ -1,0 +1,39 @@
+.notes-list {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 5em 2rem 2em;
+    text-align: left;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 300px);
+}
+
+ion-card {
+    --background: #F6C9C8;
+    --color: #262626;
+    box-shadow: 0px 5px 16px #4d4d4d;
+    cursor: pointer;
+}
+
+ion-card:nth-child(odd) {
+    --background: #FCF4A7;
+}
+
+ion-card:nth-child(3n+2) {
+    --background: #BCF2FD;
+}
+
+ion-card:nth-child(2n+5) {
+    --background: #C3FDAA;
+}
+
+ion-card-title {
+    --color: #000;
+}
+
+@media only screen and (max-width: 600px) {
+    .notes-list {
+        grid-template-columns: 1fr;
+    }
+}

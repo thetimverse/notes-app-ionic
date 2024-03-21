@@ -57,8 +57,6 @@ const Menu: React.FC = () => {
         return uniq(flatten(notes.map((note) => note.tags)))
     }, [notes])
 
-    console.log(tagList)
-
     return (
         <IonMenu contentId="main" type="overlay">
             <IonContent>
@@ -75,7 +73,7 @@ const Menu: React.FC = () => {
                             })
 
                             return (
-                                <IonMenuToggle key={index} autoHide={false}>
+                                <IonMenuToggle key={index}>
                                     <IonItemSliding>
                                         <IonItem className={location.pathname === `/notes/${note.id}` ? 'selected' : ''}
                                                  routerLink={`/notes/${note.id}`} routerDirection="none" detail={true}

@@ -151,6 +151,10 @@ ion-menu::part(container) {
     /*box-shadow: 4px 0px 16px rgba(255, 0, 255, 0.18);*/
 }
 
+ion-split-pane {
+    --border: 1px dashed #b3baff;
+}
+
 ion-menu::part(container).show-menu {
     border-radius: 0 10px 10px 0;
     box-shadow: 4px 0 16px var(--ion-color-primary);

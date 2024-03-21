@@ -1,8 +1,20 @@
 import {useNoteStore} from "@/stores/FileStore";
 import {useMemo} from "react";
 import {useParams} from "react-router";
-import {IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar} from "@ionic/react";
-import Note from "@/components/Note";
+import {
+    IonButtons,
+    IonCard, IonCardContent,
+    IonCardHeader, IonCardTitle,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar
+} from "@ionic/react";
+import './NotesList.css'
+import { convert } from 'html-to-text';
+import truncate from "lodash/truncate";
 
 const NotesList : React.FC = () => {
     const notes = useNoteStore((s) => s.notes);
@@ -10,7 +22,7 @@ const NotesList : React.FC = () => {
 
     const filteredNotes = useMemo(() => {
         return notes.filter((note) => {
-            return note.tags.includes(tag)
+            return note?.tags?.includes(tag)
         })
     }, [notes, tag])
 
@@ -30,11 +42,23 @@ const NotesList : React.FC = () => {
                         <IonTitle size="large">Notes</IonTitle>
                     </IonToolbar>
                 </IonHeader>
-                <div className={"container"}>
+                <div className={"notes-list"}>
                     {
                         filteredNotes.map((note, index) =>{
                             return (
-                                <h2 key={index}>{note.title}</h2>
+                                <IonCard key={index} button={true} href={`/notes/${note.id}`}>
+                                    <IonCardHeader>
+                                        <IonCardTitle>{note.title}</IonCardTitle>
+                                    </IonCardHeader>
+                                    <IonCardContent>
+                                        {
+                                            truncate(convert(note.content), {
+                                                'length': 230,
+                                                'separator': /,? +/
+                                            })
+                                        }
+                                    </IonCardContent>
+                                </IonCard>
                             )
                         })
                     }

@@ -7,8 +7,8 @@ import {IonButton, IonIcon, IonInput, IonItem, useIonRouter} from "@ionic/react"
 import React, {useEffect, useMemo, useState} from "react";
 import {TagsInput} from '@ark-ui/react'
 import {closeOutline, closeSharp, trashOutline, trashSharp} from "ionicons/icons";
-
-let nextId = 0;
+import pull from "lodash/pull";
+import cloneDeep from "lodash/cloneDeep";
 
 const Note: React.FC = () => {
     const {id} = useParams<{ id: string; }>();
@@ -38,7 +38,6 @@ const Note: React.FC = () => {
                 newTagName
             ])
         }
-
         f();
         return tags;
     };
@@ -50,7 +49,9 @@ const Note: React.FC = () => {
 
     const deleteTag = (tag: string) => {
         deleteTheTag(tag);
-        console.log(tag, tags)
+        const newTags = cloneDeep(tags);
+        pull(newTags, tag);
+        setTags(newTags);
     }
 
     useEffect(() => {
