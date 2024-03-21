@@ -73,7 +73,7 @@ const Menu: React.FC = () => {
                             })
 
                             return (
-                                <IonMenuToggle key={index}>
+                                <IonMenuToggle key={index} autoHide={false}>
                                     <IonItemSliding>
                                         <IonItem className={location.pathname === `/notes/${note.id}` ? 'selected' : ''}
                                                  routerLink={`/notes/${note.id}`} routerDirection="none" detail={true}
