@@ -1,13 +1,10 @@
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
-  IonIcon,
-  IonLabel,
   IonRouterOutlet, IonSplitPane,
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import {clipboard, clipboardOutline, create, home} from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -31,21 +28,17 @@ import Page from "@/pages/Page";
 import Menu from "@/components/Menu";
 import './App.css';
 import Deleted from "@/pages/Deleted";
-import {useNoteStore} from "@/stores/FileStore";
+import NotesList from "@/pages/NotesList";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const notes = useNoteStore((s) => s.notes);
   return (
       <IonApp>
         <IonReactRouter>
           <IonSplitPane contentId="main">
             <Menu/>
             <IonRouterOutlet id="main">
-              <Route path="/" exact={true}>
-                <Redirect to="/notes"/>
-              </Route>
               <Route path="/notes" exact={true}>
                 <Page/>
               </Route>
@@ -54,6 +47,12 @@ const App: React.FC = () => {
               </Route>
               <Route path="/notes/:id" exact={true}>
                 <Page/>
+              </Route>
+              <Route path="/tags/:tag" exact={true}>
+                <NotesList />
+              </Route>
+              <Route path="/" exact={true}>
+                <Redirect to="/notes"/>
               </Route>
             </IonRouterOutlet>
           </IonSplitPane>

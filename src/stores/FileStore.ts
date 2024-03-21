@@ -1,24 +1,23 @@
 import {create} from 'zustand';
-import {createJSONStorage, devtools, persist} from 'zustand/middleware';
-import type {} from '@redux-devtools/extension';
+import {createJSONStorage, persist} from 'zustand/middleware';
 import {immer} from 'zustand/middleware/immer';
 import {Note} from "@/types";
-import note from "@/components/Note";
+import pull from "lodash/pull";
 
 interface NoteState {
     notes: Note[],
-    addNote: (id: Note["id"], title: Note["title"], content: Note["content"], updatedAt: Note["updatedAt"]) => void,
-    updateNote: (id: Note["id"], title: Note["title"], content: Note["content"], tags: Note["tags"], updatedAt?: Note["updatedAt"]) => void,
+    addNote: (id: Note["id"], title: Note["title"], content: Note["content"]) => void,
+    updateNote: (id: Note["id"], title: Note["title"], content: Note["content"], tags: Note["tags"]) => void,
     deleteNote: (id: Note["id"]) => void,
-    deleteTag: (id: Note["id"], tagId: number) => void,
+    deleteTag: (tag: string) => void,
 }
 
 export const useNoteStore = create(
     persist(
         immer<NoteState>(
-            (set, get) => ({
+            (set) => ({
                 notes: [],
-                addNote: (id, title, content, updatedAt) => set((state) => ({
+                addNote: (id, title, content) => set((state) => ({
                         notes: [
                             ...state.notes,
                             {
@@ -26,12 +25,12 @@ export const useNoteStore = create(
                                 title,
                                 content,
                                 createdAt: new Date().toISOString(),
-                                updatedAt,
+                                updatedAt: new Date().toISOString(),
                             }
                         ],
                     })
                 ),
-                updateNote: (id, title, content, tags, updatedAt) => {
+                updateNote: (id, title, content, tags) => {
                     set((state) => {
                         const notes = [...state.notes];
                         const noteIndex = notes.findIndex((n) => {
@@ -46,10 +45,11 @@ export const useNoteStore = create(
                             1,
                             {
                                 ...note,
+                                id,
                                 title,
                                 content,
                                 updatedAt,
-                                tags: tags || []
+                                tags: tags || [],
                             }
                         );
                         return {notes};
@@ -62,12 +62,10 @@ export const useNoteStore = create(
                     }), 1);
                     return {notes};
                 }),
-                deleteTag: (id, tagId) => set((state) => {
+                deleteTag: (tag) => set((state) => {
                     const notes = [...state.notes];
                     notes.forEach((note) => {
-                        note.tags = note.tags.filter((tag) => {
-                            return tag.id != tagId;
-                        })
+                        return pull(note.tags, tag);
                     });
                 })
             })

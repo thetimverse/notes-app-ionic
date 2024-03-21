@@ -7,11 +7,6 @@ import {IonButton, IonIcon, IonInput, IonItem, useIonRouter} from "@ionic/react"
 import React, {useEffect, useMemo, useState} from "react";
 import {TagsInput} from '@ark-ui/react'
 import {closeOutline, closeSharp, trashOutline, trashSharp} from "ionicons/icons";
-import styled from "@emotion/styled";
-
-const StButton = styled(IonButton)`
-    width: fit-content;
-`
 
 let nextId = 0;
 
@@ -40,7 +35,7 @@ const Note: React.FC = () => {
         function f() {
             setTags([
                 ...tags,
-                {id: nextId++, name: newTagName, note: id}
+                newTagName
             ])
         }
 
@@ -53,12 +48,9 @@ const Note: React.FC = () => {
         navigate.push("/deleted");
     };
 
-    const deleteTag = (id: string, tagId: number) => {
-        tags.find((tag) => {
-            return tag.id === tagId;
-        });
-        deleteTheTag(id, tagId);
-        console.log(tagId, tags)
+    const deleteTag = (tag: string) => {
+        deleteTheTag(tag);
+        console.log(tag, tags)
     }
 
     useEffect(() => {
@@ -74,10 +66,10 @@ const Note: React.FC = () => {
                                  onIonChange={(e: any) => setTitle(e.target.value)} value={title}
                         ></IonInput>
                     </IonItem>
-                    <StButton onClick={() => deleteNote(id)} color={"danger"}>
+                    <IonButton onClick={() => deleteNote(id)} color={"danger"}>
                         Delete note
                         <IonIcon slot="end" ios={trashOutline} md={trashSharp}></IonIcon>
-                    </StButton>
+                    </IonButton>
                 </div>
                 <div className={"tags-input"}>
                     <TagsInput.Root blurBehavior={"add"}>
@@ -86,10 +78,10 @@ const Note: React.FC = () => {
                                 <TagsInput.Control>
                                     {
                                         tags.map((tag, index) => (
-                                            <TagsInput.Item key={index} index={index} value={tag.name}>
-                                                <TagsInput.ItemText>{tag.name} </TagsInput.ItemText>
+                                            <TagsInput.Item key={index} index={index} value={tag}>
+                                                <TagsInput.ItemText>{tag} </TagsInput.ItemText>
                                                 <TagsInput.ItemDeleteTrigger
-                                                    onClick={() => deleteTag(id, tag.id)}>
+                                                    onClick={() => deleteTag(tag)}>
                                                     <IonIcon slot="icon-only"
                                                              ios={closeOutline}
                                                              md={closeSharp}></IonIcon>
@@ -114,6 +106,7 @@ const Note: React.FC = () => {
                                 toolbar: {
                                     items: [
                                         'undo', 'redo',
+                                        // '|', 'Heading',
                                         '|', 'bold', 'italic',
                                         '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
                                     ]

@@ -11,75 +11,26 @@ import {
     IonNote, IonToolbar, useIonRouter,
 } from '@ionic/react';
 
-import {Route, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import {
-    archiveOutline,
-    archiveSharp,
-    bookmarkOutline,
-    clipboardOutline, clipboardSharp,
-    heartOutline,
-    heartSharp, listCircle,
-    mailOutline,
-    mailSharp,
-    paperPlaneOutline,
-    paperPlaneSharp, pin, share, trash,
+    listCircle,
     trashOutline,
     trashSharp,
-    warningOutline,
-    warningSharp
 } from 'ionicons/icons';
 import './Menu.css';
 import {useNoteStore} from "@/stores/FileStore";
-import {Button} from "@/components/ui/button";
-import Page from "@/pages/Page";
 import styled from "@emotion/styled";
-import { v4 as uuid } from 'uuid';
-import {useEffect, useMemo, useState} from "react";
-import {useParams} from "react-router";
-import * as dayjs from 'dayjs';
-import {format, formatDistanceStrict} from 'date-fns';
-
-interface AppPage {
-    url: string;
-    iosIcon: string;
-    mdIcon: string;
-    title: string;
-}
-
-const appPages: AppPage[] = [
-    {
-        title: 'Note',
-        url: '/notes',
-        iosIcon: clipboardOutline,
-        mdIcon: clipboardSharp
-    },
-    {
-        title: 'New Note',
-        url: `/notes/:id`,
-        iosIcon: paperPlaneOutline,
-        mdIcon: paperPlaneSharp
-    },
-    {
-        title: 'Favorites',
-        url: '/favorites',
-        iosIcon: heartOutline,
-        mdIcon: heartSharp
-    },
-    {
-        title: 'Trash',
-        url: '/trash',
-        iosIcon: trashOutline,
-        mdIcon: trashSharp
-    },
-];
+import {v4 as uuid} from 'uuid';
+import {formatDistanceStrict} from 'date-fns';
+import {useMemo} from "react";
+import flatten from "lodash/flatten";
+import uniq from "lodash/uniq";
 
 const StIonButton = styled(IonButton)`
-    //margin-left: 10px;
     margin-bottom: 20px;
 `
 
 const Menu: React.FC = () => {
-    const {id} = useParams<{ id: string; }>();
     const location = useLocation();
     const navigate = useIonRouter();
     const addNote = useNoteStore((s) => s.addNote);
@@ -87,22 +38,26 @@ const Menu: React.FC = () => {
     const notes = useNoteStore((s) => s.notes);
     const state = useNoteStore();
     const notesToSort = [...state.notes];
-    const sortedNotes = notesToSort.sort((a,b) => {
+    const sortedNotes = notesToSort.sort((a, b) => {
         return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
     });
 
     const addNewNote = () => {
         const id = uuid();
-        const updatedAt = new Date().toISOString();
         const title = "New Note";
         const content = "";
-        addNote(id, title, content, updatedAt);
+        addNote(id, title, content);
         navigate.push(`/notes/${id}`);
     };
     const deleteNote = (id: string) => {
         deleteTheNote(id);
         navigate.push("/deleted");
     };
+    const tagList = useMemo(() => {
+        return uniq(flatten(notes.map((note) => note.tags)))
+    }, [notes])
+
+    console.log(tagList)
 
     return (
         <IonMenu contentId="main" type="overlay">
@@ -122,14 +77,17 @@ const Menu: React.FC = () => {
                             return (
                                 <IonMenuToggle key={index} autoHide={false}>
                                     <IonItemSliding>
-                                        <IonItem className={location.pathname === `/notes/${note.id}` ? 'selected' : ''} routerLink={`/notes/${note.id}`} routerDirection="none" detail={true} lines={"inset"}>
+                                        <IonItem className={location.pathname === `/notes/${note.id}` ? 'selected' : ''}
+                                                 routerLink={`/notes/${note.id}`} routerDirection="none" detail={true}
+                                                 lines={"inset"}>
                                             <IonLabel>
-                                                <h2>{ note.title }</h2>
-                                                <p>{ timeSinceUpdate }</p>
+                                                <h2>{note.title}</h2>
+                                                <p>{timeSinceUpdate}</p>
                                             </IonLabel>
                                         </IonItem>
                                         <IonItemOptions slot="end">
-                                            <IonItemOption color="danger" expandable={true} onClick={() => deleteNote(`${note.id}`)}>
+                                            <IonItemOption color="danger" expandable={true}
+                                                           onClick={() => deleteNote(`${note.id}`)}>
                                                 <IonIcon slot="icon-only" ios={trashOutline} md={trashSharp}></IonIcon>
                                             </IonItemOption>
                                         </IonItemOptions>
@@ -140,40 +98,39 @@ const Menu: React.FC = () => {
                     }
                 </IonList>
 
+
                 <IonList inset={true} id="labels-list">
                     <IonListHeader>Tags</IonListHeader>
                     {
-                        sortedNotes?.map((note, index) => {
+                        tagList.map((tag, index) => {
+                            // const notesWithTag = note?.tags?.filter(
+                            //     (t) => t === "hello"
+                            // );
                             return (
-                                note?.tags?.map((tag, index) => {
-                                    const notesWithTag = note?.tags?.filter(
-                                        (t) => t.name === "hello"
-                                    );
-                                    return (
-                                        <IonItem button={true} key={index} className={location.pathname === `/notes/${tag.note}` ? 'selected' : ''} routerLink={`/notes/${tag.note}`}>
-                                            <IonIcon color="primary" slot="start" icon={listCircle} size="large"></IonIcon>
-                                            <IonLabel>
-                                                <h2>{tag.name}</h2>
-                                                {
-                                                    notesWithTag.map((t, index) => {
-                                                        return (
-                                                            <p key={index}>{t.note}</p>
-                                                        )
-                                                    })
-                                                }
-                                            </IonLabel>
-                                            <IonNote slot="end">
-                                                {
-                                                    note?.tags?.length
-                                                }
-                                            </IonNote>
-                                        </IonItem>
-                                    )
-                                })
+                                <IonItem key={index} className={location.pathname === `/tags/${tag}` ? 'selected' : ''}
+                                         routerLink={`/tags/${tag}`} routerDirection="none">
+                                    <IonIcon color="primary" slot="start" icon={listCircle} size="large"></IonIcon>
+                                    <IonLabel>
+                                        <h2>{tag}</h2>
+                                        {/*{*/}
+                                        {/*    notesWithTag.map((t, index) => {*/}
+                                        {/*        return (*/}
+                                        {/*            <p key={index}>{t}</p>*/}
+                                        {/*        )*/}
+                                        {/*    })*/}
+                                        {/*}*/}
+                                    </IonLabel>
+                                    <IonNote slot="end">
+                                        {/*{*/}
+                                        {/*    note?.tags?.length*/}
+                                        {/*}*/}
+                                    </IonNote>
+                                </IonItem>
                             )
                         })
                     }
                 </IonList>
+
             </IonContent>
         </IonMenu>
     );

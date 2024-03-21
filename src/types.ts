@@ -1,8 +1,4 @@
-export type Tag = {
-    id: number,
-    name: string,
-    note: string
-}
+export type Tag = string
 
 export type Note = {
     id: string,
@@ -10,5 +6,5 @@ export type Note = {
     content: string,
     createdAt: string,
     updatedAt: string,
-    tags: Tag[]
+    tags: Tag[],
 }
