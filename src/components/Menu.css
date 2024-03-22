@@ -10,10 +10,6 @@ ion-menu.md ion-content {
     box-shadow: 5px 5px 16px #4d4d4d;
 }
 
-ion-menu.md ion-list {
-
-}
-
 .list-md.list-inset {
     margin-top: 0;
 }
@@ -23,7 +19,7 @@ ion-menu.md ion-list {
 }
 
 ion-menu.md ion-list-header {
-    margin-bottom: 0;
+    margin: 20px 0 10px;
 }
 
 ion-menu.md ion-list-header, ion-menu.md ion-note {
@@ -78,10 +74,6 @@ ion-menu.ios ion-content {
     --padding-bottom: 20px;
 }
 
-ion-menu.ios ion-list {
-    padding: 20px 0 0 0;
-}
-
 ion-menu.ios ion-list-header {
     line-height: 24px;
     margin-bottom: 20px;
@@ -124,7 +116,7 @@ ion-menu.ios .item-lines-inset,
 ion-menu.md .item-lines-inset {
     border-bottom: 1px solid;
     border-radius: 0;
-    border-color: #333;
+    border-color: #9e9e9e;
 }
 
 ion-menu.ios ion-list-header {
@@ -142,13 +134,7 @@ ion-menu::part(backdrop) {
 }
 
 ion-menu::part(container) {
-    /*border-right: #4d4d4d 1px solid;*/
-    box-shadow: 5px 5px 16px #4d4d4d;
     z-index: 1;
-}
-
-ion-menu::part(container) {
-    /*box-shadow: 4px 0px 16px rgba(255, 0, 255, 0.18);*/
 }
 
 ion-split-pane {
@@ -157,5 +143,4 @@ ion-split-pane {
 
 ion-menu::part(container).show-menu {
     border-radius: 0 10px 10px 0;
-    box-shadow: 4px 0 16px var(--ion-color-primary);
 }

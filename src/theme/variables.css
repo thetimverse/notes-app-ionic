@@ -241,7 +241,7 @@ html {
   --ion-dynamic-font: var(--ion-default-dynamic-font);
 }
 
-ion-content::part(scroll) {
+ion-content {
   padding-top: var(--ion-safe-area-top, 0);
 }
 
