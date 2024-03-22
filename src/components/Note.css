@@ -11,6 +11,10 @@
     flex-direction: column;
 }
 
+.ck.ck-editor__editable_inline {
+    padding: 0 1.5em !important;
+}
+
 .ck-editor__editable_inline:not(.ck-comment__input *) {
     height: 100vh;
     overflow-y: auto;
