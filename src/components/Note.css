@@ -1,6 +1,6 @@
 .container {
     width: 100%;
-    padding-top: 5em;
+    padding-top: 10px;
     margin-right: auto;
     margin-left: auto;
     padding-right: 2rem;
@@ -43,6 +43,7 @@
 
 [data-scope='tags-input'][data-part='item'] {
     background: var(--ion-color-primary);
+    color: #fff;
     padding: 5px 15px;
     border-radius: 20px;
     display: flex;

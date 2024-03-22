@@ -1,6 +1,7 @@
 import {
     IonButton,
     IonContent,
+    IonHeader,
     IonIcon,
     IonItem, IonItemOption, IonItemOptions, IonItemSliding,
     IonLabel,
@@ -8,11 +9,12 @@ import {
     IonListHeader,
     IonMenu,
     IonMenuToggle,
-    IonNote, IonToolbar, useIonRouter,
+    IonNote, IonTitle, IonToolbar, useIonRouter,
 } from '@ionic/react';
 
 import {useLocation} from 'react-router-dom';
 import {
+    arrowForward,
     listCircle,
     trashOutline,
     trashSharp,
@@ -58,14 +60,13 @@ const Menu: React.FC = () => {
     }, [notes])
 
     return (
-        <IonMenu contentId="main" type="overlay">
+        <IonMenu contentId="main" type="push">
             <IonContent>
                 <IonList id="inbox-list" inset={true}>
-                    <IonToolbar>
-                        <IonListHeader>Notes</IonListHeader>
-                    </IonToolbar>
-
-                    <StIonButton onClick={addNewNote}>New Note</StIonButton>
+                    <IonListHeader>Notes</IonListHeader>
+                    <IonMenuToggle autoHide={false}>
+                        <StIonButton onClick={addNewNote}>New Note</StIonButton>
+                    </IonMenuToggle>
                     {
                         sortedNotes.toReversed().map((note, index) => {
                             const timeSinceUpdate = formatDistanceStrict(note.updatedAt, new Date(), {
@@ -105,25 +106,15 @@ const Menu: React.FC = () => {
                             //     (t) => t === "hello"
                             // );
                             return (
-                                <IonItem key={index} className={location.pathname === `/tags/${tag}` ? 'selected' : ''}
-                                         routerLink={`/tags/${tag}`} routerDirection="none">
-                                    <IonIcon color="primary" slot="start" icon={listCircle} size="large"></IonIcon>
-                                    <IonLabel>
-                                        <h2>{tag}</h2>
-                                        {/*{*/}
-                                        {/*    notesWithTag.map((t, index) => {*/}
-                                        {/*        return (*/}
-                                        {/*            <p key={index}>{t}</p>*/}
-                                        {/*        )*/}
-                                        {/*    })*/}
-                                        {/*}*/}
-                                    </IonLabel>
-                                    <IonNote slot="end">
-                                        {/*{*/}
-                                        {/*    note?.tags?.length*/}
-                                        {/*}*/}
-                                    </IonNote>
-                                </IonItem>
+                                <IonMenuToggle key={index} autoHide={false}>
+                                    <IonItem className={location.pathname === `/tags/${tag}` ? 'selected' : ''}
+                                            routerLink={`/tags/${tag}`} routerDirection="none" detail={true}>
+                                        <IonIcon color="primary" slot="start" icon={listCircle} size="large"></IonIcon>
+                                        <IonLabel>
+                                            <h2>{tag}</h2>
+                                        </IonLabel>
+                                    </IonItem>
+                                </IonMenuToggle>
                             )
                         })
                     }

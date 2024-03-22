@@ -14,9 +14,6 @@ const StTitle = styled.h2`
     padding: 2em;
     font-size: 18px;
 `
-const StText = styled.h2`
-    padding-left: 2em;
-`
 
 const Deleted: React.FC = () => {
     return (
@@ -37,7 +34,7 @@ const Deleted: React.FC = () => {
                 </IonHeader>
                 <div className="container">
                     <StTitle>Note successfully deleted!</StTitle>
-                    <StText>Write a new note</StText>
+                    <p>Write a new note</p>
                 </div>
             </IonContent>
         </IonPage>
