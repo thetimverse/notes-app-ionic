@@ -9,6 +9,7 @@ import {TagsInput} from '@ark-ui/react'
 import {closeOutline, closeSharp, trashOutline, trashSharp} from "ionicons/icons";
 import pull from "lodash/pull";
 import cloneDeep from "lodash/cloneDeep";
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 
 const Note: React.FC = () => {
     const {id} = useParams<{ id: string; }>();
@@ -54,9 +55,46 @@ const Note: React.FC = () => {
         setTags(newTags);
     }
 
+    const writeInDir = async (content) => {
+        await Filesystem.stat('notesAppDir5')
+            .then(
+                async (content) => {
+                    await Filesystem.writeFile({
+                        path: 'notesAppDir5/test2.json',
+                        data: content,
+                        directory: Directory.Data,
+                        encoding: Encoding.UTF8,
+                    });
+                }
+            )
+            .catch(
+                async () => {
+                    await Filesystem.mkdir({
+                         path: 'notesAppDir5',
+                         directory: Directory.Data,
+                         recursive: false,
+                    });
+                }
+            )
+    };
+
+    const readSecretFile = async () => {
+      const contents = await Filesystem.readFile({
+        path: 'notesAppDir5/test2.json',
+        directory: Directory.Data,
+        encoding: Encoding.UTF8,
+      });
+
+      console.log('content:', JSON.stringify(contents));
+    };
+
     useEffect(() => {
         updateNote();
+        //writeNoteFile(content);
+        writeInDir(content);
+        readSecretFile();
     }, [id, title, content, tags]);
+
 
     return (
         <div className="container">
