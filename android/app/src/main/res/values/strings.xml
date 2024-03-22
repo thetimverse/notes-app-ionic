@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Notes App 2</string>
+    <string name="title_activity_main">Notes App 2</string>
+    <string name="package_name">my.notes.app2</string>
+    <string name="custom_url_scheme">my.notes.app2</string>
+</resources>
